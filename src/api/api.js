@@ -48,7 +48,7 @@ export const AuthService = {
   register(userData) {
     return client.post("register", userData);
   },
-  async signup(userData) {
+  async login(userData) {
     try {
       const token = LocalStorage.get("BearerToken");
       const response = await client.post("login", userData, {
