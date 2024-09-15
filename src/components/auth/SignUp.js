@@ -27,7 +27,7 @@ const SignUp = () => {
 
       if (response.status === 200) {
         // Success logic, redirect to login page
-        navigate('/login');
+        navigate('/login'); // Redirect to login page
       }
     } catch (error) {
       if (error.response && error.response.status === 422) {
