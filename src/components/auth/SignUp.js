@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom'; // Import useNavigate for redirection
 import { AuthService } from '../../api/api';
 import PopUp from '../PopUp';
 
@@ -8,6 +9,7 @@ const SignUp = () => {
   const [password, setPassword] = useState('');
   const [confirmedPassword, setConfirmedPassword] = useState('');
   const [popupOpen, setPopupOpen] = useState(false);
+  const navigate = useNavigate(); // Initialize useNavigate
 
   const showAccount = async (e) => {
     e.preventDefault();
@@ -23,13 +25,13 @@ const SignUp = () => {
       const response = await AuthService.register(registerUserData);
       console.log('API Response', response);
 
-      // Nakon uspešne registracije, automatski preusmeravamo korisnika na login stranicu
       if (response.status === 200) {
-        // Success logic, maybe redirect or show a success message
+        // Success logic, redirect to login page
+        navigate('/login');
       }
     } catch (error) {
       if (error.response && error.response.status === 422) {
-        // Otvorite popup za već postojeći nalog
+        // Open popup for existing account
         setPopupOpen(true);
       } else {
         console.error('Error calling registration API', error);
@@ -72,9 +74,7 @@ const SignUp = () => {
                 name="name"
                 type="text"
                 required
-                onChange={(e) => {
-                  setFirstName(e.target.value);
-                }}
+                onChange={(e) => setFirstName(e.target.value)}
                 className="block w-full rounded-md border-0 py-2 px-3 text-gray-100 bg-gray-800 shadow-sm ring-1 ring-inset ring-gray-700 placeholder:text-gray-500 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
               />
             </div>
@@ -93,9 +93,7 @@ const SignUp = () => {
                 type="email"
                 autoComplete="email"
                 required
-                onChange={(e) => {
-                  setEmail(e.target.value);
-                }}
+                onChange={(e) => setEmail(e.target.value)}
                 className="block w-full rounded-md border-0 py-2 px-3 text-gray-100 bg-gray-800 shadow-sm ring-1 ring-inset ring-gray-700 placeholder:text-gray-500 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
               />
             </div>
@@ -114,9 +112,7 @@ const SignUp = () => {
                 autoComplete="current-password"
                 type="password"
                 required
-                onChange={(e) => {
-                  setPassword(e.target.value);
-                }}
+                onChange={(e) => setPassword(e.target.value)}
                 className="block w-full rounded-md border-0 py-2 px-3 text-gray-100 bg-gray-800 shadow-sm ring-1 ring-inset ring-gray-700 placeholder:text-gray-500 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
               />
             </div>
@@ -136,9 +132,7 @@ const SignUp = () => {
                 type="password"
                 required
                 autoComplete="current-password"
-                onChange={(e) => {
-                  setConfirmedPassword(e.target.value);
-                }}
+                onChange={(e) => setConfirmedPassword(e.target.value)}
                 className="block w-full rounded-md border-0 py-2 px-3 text-gray-100 bg-gray-800 shadow-sm ring-1 ring-inset ring-gray-700 placeholder:text-gray-500 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
               />
             </div>

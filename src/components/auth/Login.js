@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom'; // Import useNavigate for redirection
 import PopUpLogin from '../PopUpLogin'; // Ensure this path is correct
 
 const Login = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [popupOpen, setPopupOpen] = useState(false);
+  const navigate = useNavigate(); // Initialize useNavigate
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -24,6 +26,8 @@ const Login = () => {
         if (contentType && contentType.includes('application/json')) {
           const data = await response.json();
           console.log(data);
+          // Assuming login is successful, redirect to /my-profile
+          navigate('/my-profile');
         } else {
           // Handle unexpected response (e.g., HTML)
           console.error('Unexpected response:', await response.text());
