@@ -14,7 +14,6 @@ const EditProfile = () => {
   const [gender, setGender] = useState('');
   const [bio, setBio] = useState('');
   const [privacy, setPrivacy] = useState('public');
-  const [notifications, setNotifications] = useState(true);
   const [errors, setErrors] = useState({});
   const navigate = useNavigate();
 
@@ -41,7 +40,7 @@ const EditProfile = () => {
     if (validateForm()) {
       // Save changes logic
       console.log('Changes saved successfully');
-      // Navigate to previous page or show success message
+      // Navigate to profile page
       navigate('/my-profile');
     }
   };
@@ -199,17 +198,6 @@ const EditProfile = () => {
               <option value="private">Private</option>
               <option value="friends">Friends Only</option>
             </select>
-          </div>
-
-          {/* Notifications */}
-          <div className="flex items-center">
-            <input
-              type="checkbox"
-              checked={notifications}
-              onChange={() => setNotifications(!notifications)}
-              className="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
-            />
-            <label className="ml-2 block text-sm leading-6">Receive Email Notifications</label>
           </div>
 
           {/* Buttons */}
