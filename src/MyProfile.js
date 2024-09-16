@@ -11,7 +11,7 @@ const MyProfile = () => {
     // Funkcija za dohvatanje podataka sa API-ja
     const fetchUserData = async () => {
       try {
-        const response = await fetch('https://api.postman.com/profile'); // Zameni sa stvarnim URL-om API-ja
+        const response = await fetch('https://api.postman.com/profile'); 
         if (!response.ok) {
           throw new Error('Failed to fetch user data');
         }
