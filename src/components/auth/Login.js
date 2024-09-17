@@ -1,42 +1,48 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom'; // Import useNavigate for redirection
-import PopUpLogin from '../PopUpLogin'; // Ensure this path is correct
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom"; // Import useNavigate for redirection
+import PopUpLogin from "../PopUpLogin"; // Ensure this path is correct
+import { AuthService } from "../../api/api";
 
 const Login = () => {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setUsername] = useState("");
+  const [password, setPassword] = useState("");
   const [popupOpen, setPopupOpen] = useState(false);
   const navigate = useNavigate(); // Initialize useNavigate
 
+  const checkIfUserIsLoggedIn = () => {
+    const token = localStorage.getItem("BearerToken");
+    if (token) {
+      // If token exist's, user has already logged in
+      navigate("/my-profile"); // Navigate user to other page
+    }
+  };
+
+  useEffect(() => {
+    checkIfUserIsLoggedIn();
+  }, []);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    try {
-      const response = await fetch('http://127.0.0.1:8000/api/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username, password })
-      });
 
-      if (response.status === 422) {
-        // Open the popup for incorrect credentials
-        setPopupOpen(true);
-      } else {
-        const contentType = response.headers.get('Content-Type');
-
-        if (contentType && contentType.includes('application/json')) {
-          const data = await response.json();
-          console.log(data);
-          // Assuming login is successful, redirect to /my-profile
-          navigate('/my-profile');
-        } else {
-          // Handle unexpected response (e.g., HTML)
-          console.error('Unexpected response:', await response.text());
-          setPopupOpen(true);
-        }
-      }
-    } catch (error) {
-      console.error('Error:', error);
+    if (password.length < 8) {
+      console.error("Password must be longer than 8 characters");
       setPopupOpen(true);
+      return;
+    }
+
+    const loginUserData = {
+      email: email,
+      password: password,
+    };
+
+    try {
+      const response = await AuthService.login(loginUserData);
+      console.log("API Response", response);
+      // Assuming login is successful, redirect to /my-profile
+      navigate("/my-profile");
+    } catch (error) {
+      setPopupOpen(true);
+      console.error("Error calling registration API", error);
     }
   };
 
@@ -54,10 +60,18 @@ const Login = () => {
       </div>
 
       <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-        <form action="#" method="POST" className="space-y-6" onSubmit={handleSubmit}>
+        <form
+          action="#"
+          method="POST"
+          className="space-y-6"
+          onSubmit={handleSubmit}
+        >
           {/* Input for email */}
           <div>
-            <label htmlFor="email" className="block text-sm font-medium leading-6">
+            <label
+              htmlFor="email"
+              className="block text-sm font-medium leading-6"
+            >
               Email address
             </label>
             <div className="mt-2">
@@ -76,11 +90,17 @@ const Login = () => {
           {/* Input for password */}
           <div>
             <div className="flex items-center justify-between">
-              <label htmlFor="password" className="block text-sm font-medium leading-6">
+              <label
+                htmlFor="password"
+                className="block text-sm font-medium leading-6"
+              >
                 Password
               </label>
               <div className="text-sm">
-                <a href="#" className="font-semibold text-indigo-400 hover:text-indigo-300">
+                <a
+                  href="#"
+                  className="font-semibold text-indigo-400 hover:text-indigo-300"
+                >
                   Forgot password?
                 </a>
               </div>

@@ -21,7 +21,7 @@ client.interceptors.response.use(
       console.log(`Received ${HTTP_UNAUTHORIZED} status code`);
       LocalStorage.remove("BearerToken");
 
-      window.location.href = "/";
+      window.location.href = "/login";
     }
     return Promise.reject(error);
   }
@@ -80,5 +80,11 @@ export const AuthService = {
       console.error("Error logout");
       return false;
     }
+  },
+};
+
+export const UserService = {
+  GetProfile() {
+    return client.get("user");
   },
 };

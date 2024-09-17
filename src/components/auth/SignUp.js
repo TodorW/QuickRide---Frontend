@@ -1,18 +1,36 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom'; // Import useNavigate for redirection
-import { AuthService } from '../../api/api';
-import PopUp from '../PopUp';
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom"; // Import useNavigate for redirection
+import { AuthService } from "../../api/api";
+import PopUp from "../PopUp";
 
 const SignUp = () => {
-  const [firstName, setFirstName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmedPassword, setConfirmedPassword] = useState('');
+  const [firstName, setFirstName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmedPassword, setConfirmedPassword] = useState("");
   const [popupOpen, setPopupOpen] = useState(false);
   const navigate = useNavigate(); // Initialize useNavigate
 
-  const showAccount = async (e) => {
+  const checkIfUserIsLoggedIn = () => {
+    const token = localStorage.getItem("BearerToken");
+    if (token) {
+      // If token exist's, user has already logged in
+      navigate("/my-profile"); // Navigate user to other page
+    }
+  };
+
+  useEffect(() => {
+    checkIfUserIsLoggedIn();
+  }, []);
+
+  const createAccount = async (e) => {
     e.preventDefault();
+
+    if (password.length < 8) {
+      console.error("Password must be longer than 8 characters");
+      setPopupOpen(true);
+      return;
+    }
 
     const registerUserData = {
       name: firstName,
@@ -23,19 +41,13 @@ const SignUp = () => {
 
     try {
       const response = await AuthService.register(registerUserData);
-      console.log('API Response', response);
-
-      if (response.status === 200) {
-        // Success logic, redirect to login page
-        navigate('/login'); // Redirect to login page
-      }
+      // Success logic, redirect to login page
+      navigate("/login"); // Redirect to login page
+      console.log("API Response", response);
     } catch (error) {
-      if (error.response && error.response.status === 422) {
-        // Open popup for existing account
-        setPopupOpen(true);
-      } else {
-        console.error('Error calling registration API', error);
-      }
+      console.error("Error calling registration API", error);
+      // Open popup for existing account
+      setPopupOpen(true);
     }
   };
 
@@ -59,7 +71,7 @@ const SignUp = () => {
           action="#"
           method="POST"
           className="space-y-6"
-          onSubmit={showAccount}
+          onSubmit={createAccount}
         >
           <div>
             <label

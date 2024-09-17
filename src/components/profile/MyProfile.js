@@ -1,44 +1,39 @@
-import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { AuthService, UserService } from "../../api/api";
 
 const MyProfile = () => {
   const navigate = useNavigate();
-  const [userData, setUserData] = useState(null);
+  const [email, setEmail] = useState(null);
+  const [firstName, setFirstName] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    // Funkcija za dohvatanje podataka sa API-ja
-    const fetchUserData = async () => {
-      try {
-        const response = await fetch('https://api.postman.com/profile'); 
-        if (!response.ok) {
-          throw new Error('Failed to fetch user data');
-        }
-        const data = await response.json();
-        setUserData(data);
-      } catch (error) {
-        setError(error.message);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchUserData();
+    try {
+      const response = UserService.GetProfile();
+      setFirstName(response.user.name);
+      setEmail(response.user.email);
+      console.log(response.data.success);
+    } catch (error) {
+      console.log("Error fetching user:", error);
+    }
   }, []);
 
   const handleEditProfile = () => {
-    navigate('/edit-profile');
+    navigate("/edit-profile");
   };
 
-  const handleLogout = () => {
-    // Logika za odjavu korisnika
-    console.log("User logged out");
+  const handleLogout = async () => {
+    try {
+      const success = await AuthService.logout();
+      if (success) {
+        console.log("Logout successful");
+      }
+    } catch (error) {
+      console.error("Error logout", error);
+    }
   };
-
-  if (loading) {
-    return <div>Loading...</div>;
-  }
 
   if (error) {
     return <div>Error: {error}</div>;
@@ -48,58 +43,49 @@ const MyProfile = () => {
     <div className="flex min-h-screen flex-col justify-center bg-gray-900 px-6 py-12 lg:px-8 text-white">
       <div className="sm:mx-auto sm:w-full sm:max-w-lg bg-gray-800 p-6 rounded-md shadow-md">
         <h2 className="text-center text-2xl font-bold mb-8">My Profile</h2>
-
-        {/* Profilna Slika */}
-        <div className="flex justify-center mb-6">
-          <img
-            src={userData.profileImage}
-            alt="Profile"
-            className="h-32 w-32 rounded-full object-cover"
-          />
-        </div>
-
         {/* Osnovne Informacije */}
         <div className="mb-4">
           <h3 className="text-lg font-semibold">Osnovne Informacije</h3>
-          <p>Ime: {userData.firstName} {userData.lastName}</p>
-          <p>Email: {userData.email}</p>
+          <p>Ime: {firstName}</p>
+          <p>Email: {email}</p>
         </div>
-
         {/* Kontakt Informacije */}
         <div className="mb-4">
           <h3 className="text-lg font-semibold">Kontakt Informacije</h3>
-          <p>Telefon: {userData.phone}</p>
-          <p>Adresa: {userData.address}</p>
+          <p>Telefon:</p>
+          <p>Adresa:</p>
         </div>
-
         {/* Biografija */}
         <div className="mb-4">
           <h3 className="text-lg font-semibold">Biografija</h3>
-          <p>{userData.bio}</p>
+          <p></p>
         </div>
-
         {/* Društvene Mreže */}
         <div className="mb-4">
           <h3 className="text-lg font-semibold">Društvene Mreže</h3>
-          {userData.socialLinks && Object.entries(userData.socialLinks).map(([platform, url]) => (
-            <p key={platform}>
-              <a href={url} target="_blank" rel="noopener noreferrer" className="text-indigo-400 hover:underline">
-                {platform.charAt(0).toUpperCase() + platform.slice(1)}
-              </a>
-            </p>
-          ))}
+          {/* {userData.socialLinks &&
+            Object.entries(userData.socialLinks).map(([platform, url]) => (
+              <p key={platform}>
+                <a
+                  href={url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-indigo-400 hover:underline"
+                >
+                  {platform.charAt(0).toUpperCase() + platform.slice(1)}
+                </a>
+              </p>
+            ))} */}
         </div>
-
         {/* Detaljne Informacije */}
-        <div className="mb-4">
+        {/* <div className="mb-4">
           <h3 className="text-lg font-semibold">Detaljne Informacije</h3>
           <p>Datum Rođenja: {userData.birthDate}</p>
           <p>Pol: {userData.gender}</p>
           <p>Interesovanja: {userData.interests}</p>
-        </div>
-
+        </div> */}
         {/* Aktivnosti */}
-        <div className="mb-4">
+        {/* <div className="mb-4">
           <h3 className="text-lg font-semibold">Aktivnosti</h3>
           <ul className="list-disc pl-5">
             {userData.activities.map((activity, index) => (
@@ -109,21 +95,20 @@ const MyProfile = () => {
         </div>
 
         {/* Status Naloga */}
-        <div className="mb-4">
+        {/* <div className="mb-4">
           <h3 className="text-lg font-semibold">Status Naloga</h3>
           <p>{userData.accountStatus}</p>
-        </div>
-
+        </div>{" "}
+        */}
         {/* Notifikacije */}
-        <div className="mb-4">
+        {/* <div className="mb-4">
           <h3 className="text-lg font-semibold">Notifikacije</h3>
           <ul className="list-disc pl-5">
             {userData.notifications.map((notification, index) => (
               <li key={index}>{notification}</li>
             ))}
           </ul>
-        </div>
-
+        </div> */}
         {/* Dugmad za Izmenu i Odjavu */}
         <div className="flex justify-between mt-6">
           <button

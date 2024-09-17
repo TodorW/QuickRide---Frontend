@@ -1,19 +1,11 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const EditProfile = () => {
-  const [profileImage, setProfileImage] = useState(null);
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
-  const [email, setEmail] = useState('');
-  const [phone, setPhone] = useState('');
-  const [currentPassword, setCurrentPassword] = useState('');
-  const [newPassword, setNewPassword] = useState('');
-  const [address, setAddress] = useState('');
-  const [birthDate, setBirthDate] = useState('');
-  const [gender, setGender] = useState('');
-  const [bio, setBio] = useState('');
-  const [privacy, setPrivacy] = useState('public');
+  const [email, setEmail] = useState(null);
+  const [firstName, setFirstName] = useState("");
+
+  const [privacy, setPrivacy] = useState("public");
   const [errors, setErrors] = useState({});
   const navigate = useNavigate();
 
@@ -24,11 +16,13 @@ const EditProfile = () => {
   const validateForm = () => {
     const newErrors = {};
 
-    if (!firstName) newErrors.firstName = 'First name is required';
-    if (!lastName) newErrors.lastName = 'Last name is required';
-    if (!email) newErrors.email = 'Email is required';
-    if (!currentPassword) newErrors.currentPassword = 'Current password is required';
-    if (newPassword && newPassword.length < 6) newErrors.newPassword = 'New password must be at least 6 characters';
+    if (!firstName) newErrors.firstName = "First name is required";
+    if (!lastName) newErrors.lastName = "Last name is required";
+    if (!email) newErrors.email = "Email is required";
+    if (!currentPassword)
+      newErrors.currentPassword = "Current password is required";
+    if (newPassword && newPassword.length < 6)
+      newErrors.newPassword = "New password must be at least 6 characters";
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -39,26 +33,43 @@ const EditProfile = () => {
 
     if (validateForm()) {
       // Save changes logic
-      console.log('Changes saved successfully');
+      console.log("Changes saved successfully");
       // Navigate to profile page
-      navigate('/my-profile');
+      navigate("/my-profile");
     }
   };
 
   const handleCancel = () => {
     // Cancel changes logic
-    navigate('/my-profile');
+    navigate("/my-profile");
   };
+
+  const fetchUser = async () => {
+    try {
+      const response = await ProfileService.GetProfile();
+      setUser(response.data.success);
+      setFirstName(response.user.name);
+      setLastName(response.user.email);
+      console.log(response.data.success);
+    } catch (error) {
+      console.log("Error fetching user:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchUser();
+  }, []);
 
   return (
     <div className="flex min-h-screen flex-col justify-center bg-gray-900 px-6 py-12 lg:px-8 text-white">
       <div className="sm:mx-auto sm:w-full sm:max-w-lg bg-gray-800 p-6 rounded-md shadow-md">
         <h2 className="text-center text-2xl font-bold mb-8">Edit Profile</h2>
         <form onSubmit={handleSave} className="space-y-6">
-
           {/* Profile Picture */}
           <div>
-            <label className="block text-sm font-medium leading-6">Profile Picture</label>
+            <label className="block text-sm font-medium leading-6">
+              Profile Picture
+            </label>
             <div className="mt-2 flex items-center">
               <img
                 src={profileImage || "https://via.placeholder.com/150"}
@@ -76,40 +87,54 @@ const EditProfile = () => {
 
           {/* Basic Information */}
           <div>
-            <label className="block text-sm font-medium leading-6">First Name</label>
+            <label className="block text-sm font-medium leading-6">
+              First Name
+            </label>
             <input
               type="text"
               value={firstName}
               onChange={(e) => setFirstName(e.target.value)}
               className="block w-full rounded-md border-0 py-2 px-3 text-gray-100 bg-gray-800 shadow-sm ring-1 ring-inset ring-gray-700 placeholder:text-gray-500 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm"
             />
-            {errors.firstName && <p className="text-red-500 text-xs mt-1">{errors.firstName}</p>}
+            {errors.firstName && (
+              <p className="text-red-500 text-xs mt-1">{errors.firstName}</p>
+            )}
           </div>
 
           <div>
-            <label className="block text-sm font-medium leading-6">Last Name</label>
+            <label className="block text-sm font-medium leading-6">
+              Last Name
+            </label>
             <input
               type="text"
               value={lastName}
               onChange={(e) => setLastName(e.target.value)}
               className="block w-full rounded-md border-0 py-2 px-3 text-gray-100 bg-gray-800 shadow-sm ring-1 ring-inset ring-gray-700 placeholder:text-gray-500 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm"
             />
-            {errors.lastName && <p className="text-red-500 text-xs mt-1">{errors.lastName}</p>}
+            {errors.lastName && (
+              <p className="text-red-500 text-xs mt-1">{errors.lastName}</p>
+            )}
           </div>
 
           <div>
-            <label className="block text-sm font-medium leading-6">Email Address</label>
+            <label className="block text-sm font-medium leading-6">
+              Email Address
+            </label>
             <input
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               className="block w-full rounded-md border-0 py-2 px-3 text-gray-100 bg-gray-800 shadow-sm ring-1 ring-inset ring-gray-700 placeholder:text-gray-500 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm"
             />
-            {errors.email && <p className="text-red-500 text-xs mt-1">{errors.email}</p>}
+            {errors.email && (
+              <p className="text-red-500 text-xs mt-1">{errors.email}</p>
+            )}
           </div>
 
           <div>
-            <label className="block text-sm font-medium leading-6">Phone Number</label>
+            <label className="block text-sm font-medium leading-6">
+              Phone Number
+            </label>
             <input
               type="tel"
               value={phone}
@@ -120,30 +145,42 @@ const EditProfile = () => {
 
           {/* Change Password */}
           <div>
-            <label className="block text-sm font-medium leading-6">Current Password</label>
+            <label className="block text-sm font-medium leading-6">
+              Current Password
+            </label>
             <input
               type="password"
               value={currentPassword}
               onChange={(e) => setCurrentPassword(e.target.value)}
               className="block w-full rounded-md border-0 py-2 px-3 text-gray-100 bg-gray-800 shadow-sm ring-1 ring-inset ring-gray-700 placeholder:text-gray-500 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm"
             />
-            {errors.currentPassword && <p className="text-red-500 text-xs mt-1">{errors.currentPassword}</p>}
+            {errors.currentPassword && (
+              <p className="text-red-500 text-xs mt-1">
+                {errors.currentPassword}
+              </p>
+            )}
           </div>
 
           <div>
-            <label className="block text-sm font-medium leading-6">New Password</label>
+            <label className="block text-sm font-medium leading-6">
+              New Password
+            </label>
             <input
               type="password"
               value={newPassword}
               onChange={(e) => setNewPassword(e.target.value)}
               className="block w-full rounded-md border-0 py-2 px-3 text-gray-100 bg-gray-800 shadow-sm ring-1 ring-inset ring-gray-700 placeholder:text-gray-500 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm"
             />
-            {errors.newPassword && <p className="text-red-500 text-xs mt-1">{errors.newPassword}</p>}
+            {errors.newPassword && (
+              <p className="text-red-500 text-xs mt-1">{errors.newPassword}</p>
+            )}
           </div>
 
           {/* Additional Information */}
           <div>
-            <label className="block text-sm font-medium leading-6">Address</label>
+            <label className="block text-sm font-medium leading-6">
+              Address
+            </label>
             <input
               type="text"
               value={address}
@@ -153,7 +190,9 @@ const EditProfile = () => {
           </div>
 
           <div>
-            <label className="block text-sm font-medium leading-6">Date of Birth</label>
+            <label className="block text-sm font-medium leading-6">
+              Date of Birth
+            </label>
             <input
               type="date"
               value={birthDate}
@@ -163,7 +202,9 @@ const EditProfile = () => {
           </div>
 
           <div>
-            <label className="block text-sm font-medium leading-6">Gender</label>
+            <label className="block text-sm font-medium leading-6">
+              Gender
+            </label>
             <select
               value={gender}
               onChange={(e) => setGender(e.target.value)}
@@ -178,7 +219,9 @@ const EditProfile = () => {
 
           {/* Biography */}
           <div>
-            <label className="block text-sm font-medium leading-6">Biography</label>
+            <label className="block text-sm font-medium leading-6">
+              Biography
+            </label>
             <textarea
               value={bio}
               onChange={(e) => setBio(e.target.value)}
@@ -188,7 +231,9 @@ const EditProfile = () => {
 
           {/* Privacy Options */}
           <div>
-            <label className="block text-sm font-medium leading-6">Privacy Options</label>
+            <label className="block text-sm font-medium leading-6">
+              Privacy Options
+            </label>
             <select
               value={privacy}
               onChange={(e) => setPrivacy(e.target.value)}
@@ -216,7 +261,6 @@ const EditProfile = () => {
               Cancel
             </button>
           </div>
-
         </form>
       </div>
     </div>
