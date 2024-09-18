@@ -8,6 +8,7 @@ import {
 import Login from "./components/auth/Login";
 import SignUp from "./components/auth/SignUp";
 import MyProfile from "./components/profile/MyProfile"; // Import MyProfile component
+import EditProfile from "./components/profile/EditProfile";
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="/my-profile" element={<MyProfile />} />
+        <Route path="/edit-profile" element={<EditProfile />} />
       </Routes>
     </Router>
   );

@@ -1,16 +1,33 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { UserService } from "../../api/api";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 const EditProfile = () => {
-  const [email, setEmail] = useState(null);
+  const [profileImage, setProfileImage] = useState(null);
+  const [email, setEmail] = useState("");
   const [firstName, setFirstName] = useState("");
-
+  const [lastName, setLastName] = useState("");
+  const [phone, setPhone] = useState("");
+  const [currentPassword, setCurrentPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [address, setAddress] = useState("");
+  const [birthDate, setBirthDate] = useState("");
+  const [gender, setGender] = useState("");
+  const [bio, setBio] = useState("");
   const [privacy, setPrivacy] = useState("public");
   const [errors, setErrors] = useState({});
+  const [showCurrentPassword, setShowCurrentPassword] = useState(false);
+  const [showNewPassword, setShowNewPassword] = useState(false);
+
   const navigate = useNavigate();
+  const fileInputRef = React.createRef();
 
   const handleImageChange = (e) => {
-    setProfileImage(URL.createObjectURL(e.target.files[0]));
+    const file = e.target.files[0];
+    if (file) {
+      setProfileImage(URL.createObjectURL(file));
+    }
   };
 
   const validateForm = () => {
@@ -46,11 +63,17 @@ const EditProfile = () => {
 
   const fetchUser = async () => {
     try {
-      const response = await ProfileService.GetProfile();
-      setUser(response.data.success);
-      setFirstName(response.user.name);
-      setLastName(response.user.email);
-      console.log(response.data.success);
+      const response = await UserService.GetProfile();
+      const userData = response.data.success;
+      setFirstName(userData.firstName);
+      setLastName(userData.lastName);
+      setEmail(userData.email);
+      setPhone(userData.phone);
+      setAddress(userData.address);
+      setBirthDate(userData.birthDate);
+      setGender(userData.gender);
+      setBio(userData.bio);
+      console.log("User data fetched successfully", userData);
     } catch (error) {
       console.log("Error fetching user:", error);
     }
@@ -72,7 +95,10 @@ const EditProfile = () => {
             </label>
             <div className="mt-2 flex items-center">
               <img
-                src={profileImage || "https://via.placeholder.com/150"}
+                src={
+                  profileImage ||
+                  "https://cdn-icons-png.flaticon.com/512/847/847969.png"
+                }
                 alt="Profile"
                 className="h-20 w-20 rounded-full object-cover"
               />
@@ -81,7 +107,16 @@ const EditProfile = () => {
                 accept="image/*"
                 className="ml-4"
                 onChange={handleImageChange}
+                ref={fileInputRef}
+                style={{ display: "none" }}
               />
+              <button
+                type="button"
+                className="ml-4 bg-indigo-600 text-white py-2 px-4 rounded-md shadow-sm hover:bg-indigo-500 focus:ring-2 focus:ring-indigo-600"
+                onClick={() => fileInputRef.current.click()}
+              >
+                Choose File
+              </button>
             </div>
           </div>
 
@@ -148,12 +183,21 @@ const EditProfile = () => {
             <label className="block text-sm font-medium leading-6">
               Current Password
             </label>
-            <input
-              type="password"
-              value={currentPassword}
-              onChange={(e) => setCurrentPassword(e.target.value)}
-              className="block w-full rounded-md border-0 py-2 px-3 text-gray-100 bg-gray-800 shadow-sm ring-1 ring-inset ring-gray-700 placeholder:text-gray-500 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm"
-            />
+            <div className="relative">
+              <input
+                type={showCurrentPassword ? "text" : "password"}
+                value={currentPassword}
+                onChange={(e) => setCurrentPassword(e.target.value)}
+                className="block w-full rounded-md border-0 py-2 px-3 text-gray-100 bg-gray-800 shadow-sm ring-1 ring-inset ring-gray-700 placeholder:text-gray-500 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm"
+              />
+              <button
+                type="button"
+                className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400"
+                onClick={() => setShowCurrentPassword(!showCurrentPassword)}
+              >
+                {showCurrentPassword ? <FaEyeSlash /> : <FaEye />}
+              </button>
+            </div>
             {errors.currentPassword && (
               <p className="text-red-500 text-xs mt-1">
                 {errors.currentPassword}
@@ -165,12 +209,21 @@ const EditProfile = () => {
             <label className="block text-sm font-medium leading-6">
               New Password
             </label>
-            <input
-              type="password"
-              value={newPassword}
-              onChange={(e) => setNewPassword(e.target.value)}
-              className="block w-full rounded-md border-0 py-2 px-3 text-gray-100 bg-gray-800 shadow-sm ring-1 ring-inset ring-gray-700 placeholder:text-gray-500 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm"
-            />
+            <div className="relative">
+              <input
+                type={showNewPassword ? "text" : "password"}
+                value={newPassword}
+                onChange={(e) => setNewPassword(e.target.value)}
+                className="block w-full rounded-md border-0 py-2 px-3 text-gray-100 bg-gray-800 shadow-sm ring-1 ring-inset ring-gray-700 placeholder:text-gray-500 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm"
+              />
+              <button
+                type="button"
+                className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400"
+                onClick={() => setShowNewPassword(!showNewPassword)}
+              >
+                {showNewPassword ? <FaEyeSlash /> : <FaEye />}
+              </button>
+            </div>
             {errors.newPassword && (
               <p className="text-red-500 text-xs mt-1">{errors.newPassword}</p>
             )}
@@ -191,7 +244,7 @@ const EditProfile = () => {
 
           <div>
             <label className="block text-sm font-medium leading-6">
-              Date of Birth
+              Birth Date
             </label>
             <input
               type="date"
