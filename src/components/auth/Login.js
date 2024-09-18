@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom"; // Import useNavigate for redirection
+import { useNavigate, Link } from "react-router-dom"; // Import useNavigate for redirection
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 import PopUpLogin from "../PopUpLogin"; // Ensure this path is correct
 import { AuthService } from "../../api/api";
 
 const Login = () => {
   const [email, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [passwordVisible, setPasswordVisible] = useState(false);
   const [popupOpen, setPopupOpen] = useState(false);
   const navigate = useNavigate(); // Initialize useNavigate
 
@@ -105,16 +107,26 @@ const Login = () => {
                 </a>
               </div>
             </div>
-            <div className="mt-2">
+            <div className="mt-2 relative">
               <input
                 id="password"
                 name="password"
-                type="password"
+                type={passwordVisible ? "text" : "password"}
                 required
                 autoComplete="current-password"
                 className="block w-full rounded-md border-0 py-3 px-4 bg-gray-700 text-gray-200 shadow-sm ring-1 ring-inset ring-gray-600 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                 onChange={(e) => setPassword(e.target.value)}
               />
+              <div
+                className="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer"
+                onClick={() => setPasswordVisible(!passwordVisible)} // Toggle password visibility
+              >
+                {passwordVisible ? (
+                  <FaEyeSlash className="text-gray-400" />
+                ) : (
+                  <FaEye className="text-gray-400" />
+                )}
+              </div>
             </div>
           </div>
 
@@ -129,6 +141,16 @@ const Login = () => {
           </div>
         </form>
       </div>
+
+      <p className="mt-6 text-center text-sm text-gray-400">
+        Don't have an account?{" "}
+        <Link
+          to="/signup"
+          className="font-semibold text-indigo-400 hover:text-indigo-300"
+        >
+          Sign up
+        </Link>
+      </p>
 
       {/* Popup Component */}
       <PopUpLogin open={popupOpen} onClose={() => setPopupOpen(false)} />

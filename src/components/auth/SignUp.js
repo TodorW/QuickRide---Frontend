@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom"; // Import useNavigate for redirection
+import { useNavigate, Link } from "react-router-dom"; // Import useNavigate for redirection
 import { AuthService } from "../../api/api";
 import PopUp from "../PopUp";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 const SignUp = () => {
   const [firstName, setFirstName] = useState("");
@@ -9,6 +10,8 @@ const SignUp = () => {
   const [password, setPassword] = useState("");
   const [confirmedPassword, setConfirmedPassword] = useState("");
   const [popupOpen, setPopupOpen] = useState(false);
+  const [passwordVisible, setPasswordVisible] = useState(false);
+  const [confirmPasswordVisible, setConfirmPasswordVisible] = useState(false);
   const navigate = useNavigate(); // Initialize useNavigate
 
   const checkIfUserIsLoggedIn = () => {
@@ -117,16 +120,26 @@ const SignUp = () => {
             >
               Password
             </label>
-            <div className="mt-2">
+            <div className="mt-2 relative">
               <input
                 id="password"
                 name="password"
                 autoComplete="current-password"
-                type="password"
+                type={passwordVisible ? "text" : "password"}
                 required
                 onChange={(e) => setPassword(e.target.value)}
                 className="block w-full rounded-md border-0 py-2 px-3 text-gray-100 bg-gray-800 shadow-sm ring-1 ring-inset ring-gray-700 placeholder:text-gray-500 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
               />
+              <div
+                className="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer"
+                onClick={() => setPasswordVisible(!passwordVisible)}
+              >
+                {passwordVisible ? (
+                  <FaEyeSlash className="text-gray-400" />
+                ) : (
+                  <FaEye className="text-gray-400" />
+                )}
+              </div>
             </div>
           </div>
 
@@ -137,16 +150,27 @@ const SignUp = () => {
             >
               Confirm Password
             </label>
-            <div className="mt-2">
+            <div className="mt-2 relative">
               <input
                 id="confirm_password"
                 name="confirm_password"
-                type="password"
+                type={confirmPasswordVisible ? "text" : "password"}
                 required
                 autoComplete="current-password"
                 onChange={(e) => setConfirmedPassword(e.target.value)}
                 className="block w-full rounded-md border-0 py-2 px-3 text-gray-100 bg-gray-800 shadow-sm ring-1 ring-inset ring-gray-700 placeholder:text-gray-500 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
               />
+
+              <div
+                className="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer"
+                onClick={() => setConfirmPasswordVisible(!confirmPasswordVisible)}
+              >
+                {confirmPasswordVisible ? (
+                  <FaEyeSlash className="text-gray-400" />
+                ) : (
+                  <FaEye className="text-gray-400" />
+                )}
+              </div>
             </div>
           </div>
 
@@ -160,6 +184,16 @@ const SignUp = () => {
           </div>
         </form>
       </div>
+
+      <p className="mt-6 text-center text-sm text-gray-400">
+        Already have an account?{" "}
+        <Link
+          to="/login"
+          className="font-semibold text-indigo-400 hover:text-indigo-300"
+        >
+          Sign in
+        </Link>
+      </p>
 
       <PopUp open={popupOpen} onClose={() => setPopupOpen(false)} />
     </div>
