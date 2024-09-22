@@ -17,7 +17,6 @@ const Cars = () => {
         console.log("Error fetching cars:", error);
       }
     };
-
     fetchCars();
   }, []);
 
@@ -41,7 +40,7 @@ const Cars = () => {
               <a href="#" className="block">
                 <div className="relative aspect-w-2 aspect-h-3">
                   <img
-                    src={car.image}
+                    src={`http://127.0.0.1:8000/storage/cars-images/${car.image}`}
                     alt={`${car.make} ${car.model}`}
                     className="object-cover w-full h-full transition-transform duration-300 group-hover:scale-110"
                   />
@@ -80,7 +79,7 @@ const Cars = () => {
         {cars.length === 0 && (
           <div className="text-center animate-fade-in">
             <p className="text-xl text-gray-600 dark:text-gray-400">
-              Nema dostupnih automobila.
+              No available cars.
             </p>
           </div>
         )}

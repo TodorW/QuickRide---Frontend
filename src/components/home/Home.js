@@ -74,7 +74,7 @@ const Home = () => {
     const fetchProfile = async () => {
       try {
         const response = await UserService.GetProfile();
-        console.log(response.data);
+        // console.log(response.data);
         setIsAdmin(response.data.user.is_admin);
       } catch (error) {
         console.log("Error fetching user:", error);
