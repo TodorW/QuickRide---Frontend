@@ -5,9 +5,8 @@ import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 const EditProfile = () => {
   const [profileImage, setProfileImage] = useState(null);
+  const [name, setName] = useState(""); // Changed here
   const [email, setEmail] = useState("");
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
   const [phone, setPhone] = useState("");
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
@@ -33,13 +32,12 @@ const EditProfile = () => {
   const validateForm = () => {
     const newErrors = {};
 
-    if (!firstName) newErrors.firstName = "First name is required";
-    if (!lastName) newErrors.lastName = "Last name is required";
+    if (!name) newErrors.name = "Name is required"; // Updated validation
     if (!email) newErrors.email = "Email is required";
     if (!currentPassword)
       newErrors.currentPassword = "Current password is required";
-    if (newPassword && newPassword.length < 6)
-      newErrors.newPassword = "New password must be at least 6 characters";
+    if (newPassword && newPassword.length < 8)
+      newErrors.newPassword = "New password must be at least 8 characters";
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -65,8 +63,7 @@ const EditProfile = () => {
     try {
       const response = await UserService.GetProfile();
       const userData = response.data.success;
-      setFirstName(userData.firstName);
-      setLastName(userData.lastName);
+      setName(`${userData.firstName} ${userData.lastName}`); // Combined names
       setEmail(userData.email);
       setPhone(userData.phone);
       setAddress(userData.address);
@@ -120,37 +117,21 @@ const EditProfile = () => {
             </div>
           </div>
 
-          {/* Basic Information */}
+          {/* Name Field */}
           <div>
-            <label className="block text-sm font-medium leading-6">
-              First Name
-            </label>
+            <label className="block text-sm font-medium leading-6">Name</label>
             <input
               type="text"
-              value={firstName}
-              onChange={(e) => setFirstName(e.target.value)}
+              value={name}
+              onChange={(e) => setName(e.target.value)}
               className="block w-full rounded-md border-0 py-2 px-3 text-gray-100 bg-gray-800 shadow-sm ring-1 ring-inset ring-gray-700 placeholder:text-gray-500 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm"
             />
-            {errors.firstName && (
-              <p className="text-red-500 text-xs mt-1">{errors.firstName}</p>
+            {errors.name && (
+              <p className="text-red-500 text-xs mt-1">{errors.name}</p>
             )}
           </div>
 
-          <div>
-            <label className="block text-sm font-medium leading-6">
-              Last Name
-            </label>
-            <input
-              type="text"
-              value={lastName}
-              onChange={(e) => setLastName(e.target.value)}
-              className="block w-full rounded-md border-0 py-2 px-3 text-gray-100 bg-gray-800 shadow-sm ring-1 ring-inset ring-gray-700 placeholder:text-gray-500 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm"
-            />
-            {errors.lastName && (
-              <p className="text-red-500 text-xs mt-1">{errors.lastName}</p>
-            )}
-          </div>
-
+          {/* Email Address */}
           <div>
             <label className="block text-sm font-medium leading-6">
               Email Address
@@ -166,6 +147,7 @@ const EditProfile = () => {
             )}
           </div>
 
+          {/* Phone Number */}
           <div>
             <label className="block text-sm font-medium leading-6">
               Phone Number
