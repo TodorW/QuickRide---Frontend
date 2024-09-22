@@ -15,7 +15,7 @@ const Login = () => {
     const token = localStorage.getItem("BearerToken");
     if (token) {
       // If token exist's, user has already logged in
-      navigate("/my-profile"); // Navigate user to other page
+      navigate("home"); // Navigate user to other page
     }
   };
 
@@ -41,7 +41,7 @@ const Login = () => {
       const response = await AuthService.login(loginUserData);
       console.log("API Response", response);
       // Assuming login is successful, redirect to /my-profile
-      navigate("/my-profile");
+      navigate("/home");
     } catch (error) {
       setPopupOpen(true);
       console.error("Error calling registration API", error);

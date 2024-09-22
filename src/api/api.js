@@ -88,3 +88,12 @@ export const UserService = {
     return client.get("user");
   },
 };
+
+export const CarService = {
+  ListCars() {
+    return client.get("cars");
+  },
+  GetCar(id) {
+    return client.get(`car/${id}`);
+  },
+};

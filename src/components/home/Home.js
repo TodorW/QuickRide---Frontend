@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { UserService } from "../../api/api";
+import { useState, useEffect } from "react";
 import {
   Dialog,
   DialogPanel,
@@ -25,7 +26,7 @@ import {
   PhoneIcon,
   PlayCircleIcon,
 } from "@heroicons/react/20/solid";
-import Dashboard from "../dashboard/Dashboard"; // Import Dashboard component
+import Cars from "../cars/Cars"; // Import Dashboard component
 
 const products = [
   {
@@ -65,8 +66,23 @@ const callsToAction = [
   { name: "Contact sales", href: "#", icon: PhoneIcon },
 ];
 
-export default function Home({ isAdmin = false }) {
+const Home = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
+
+  useEffect(() => {
+    const fetchProfile = async () => {
+      try {
+        const response = await UserService.GetProfile();
+        console.log(response.data);
+        setIsAdmin(response.data.user.is_admin);
+      } catch (error) {
+        console.log("Error fetching user:", error);
+      }
+    };
+
+    fetchProfile();
+  }, []);
 
   return (
     <div>
@@ -186,16 +202,10 @@ export default function Home({ isAdmin = false }) {
                 >
                   <div className="p-4">
                     <a
-                      href="#"
+                      href="http://127.0.0.1:8000/login"
                       className="block font-semibold text-gray-200 hover:bg-gray-700 p-2 rounded"
                     >
                       Admin Dashboard
-                    </a>
-                    <a
-                      href="#"
-                      className="block font-semibold text-gray-200 hover:bg-gray-700 p-2 rounded"
-                    >
-                      User Management
                     </a>
                   </div>
                 </PopoverPanel>
@@ -292,9 +302,10 @@ export default function Home({ isAdmin = false }) {
           </DialogPanel>
         </Dialog>
       </header>
-      {/* Dashboard Component */}
-      <Dashboard /> {/* Include Dashboard component here */}
-      <div>TEST</div>
+      {/* Cars Component */}
+      <Cars /> {/* Include Cars component here */}
     </div>
   );
-}
+};
+
+export default Home;

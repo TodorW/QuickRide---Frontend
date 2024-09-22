@@ -18,7 +18,7 @@ const SignUp = () => {
     const token = localStorage.getItem("BearerToken");
     if (token) {
       // If token exist's, user has already logged in
-      navigate("/my-profile"); // Navigate user to other page
+      navigate("home"); // Navigate user to other page
     }
   };
 
@@ -163,7 +163,9 @@ const SignUp = () => {
 
               <div
                 className="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer"
-                onClick={() => setConfirmPasswordVisible(!confirmPasswordVisible)}
+                onClick={() =>
+                  setConfirmPasswordVisible(!confirmPasswordVisible)
+                }
               >
                 {confirmPasswordVisible ? (
                   <FaEyeSlash className="text-gray-400" />
