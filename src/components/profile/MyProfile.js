@@ -4,20 +4,24 @@ import { AuthService, UserService } from "../../api/api";
 
 const MyProfile = () => {
   const navigate = useNavigate();
-  const [email, setEmail] = useState(null);
+  const [email, setEmail] = useState("");
   const [firstName, setFirstName] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    try {
-      const response = UserService.GetProfile();
-      setFirstName(response.user.name);
-      setEmail(response.user.email);
-      console.log(response.data.success);
-    } catch (error) {
-      console.log("Error fetching user:", error);
-    }
+    const fetchProfile = async () => {
+      try {
+        const response = await UserService.GetProfile();
+        console.log(response.data);
+        setFirstName(response.data.user.name);
+        setEmail(response.data.user.email);
+      } catch (error) {
+        console.log("Error fetching user:", error);
+      }
+    };
+
+    fetchProfile();
   }, []);
 
   const handleEditProfile = () => {

@@ -1,6 +1,4 @@
-'use client'
-
-import { useState } from 'react'
+import { useState } from "react";
 import {
   Dialog,
   DialogPanel,
@@ -11,7 +9,7 @@ import {
   PopoverButton,
   PopoverGroup,
   PopoverPanel,
-} from '@headlessui/react'
+} from "@headlessui/react";
 import {
   ArrowPathIcon,
   Bars3Icon,
@@ -21,35 +19,71 @@ import {
   SquaresPlusIcon,
   XMarkIcon,
   UserIcon,
-} from '@heroicons/react/24/outline'
-import { ChevronDownIcon, PhoneIcon, PlayCircleIcon } from '@heroicons/react/20/solid'
-import Dashboard from './Dashboard' // Import Dashboard component
+} from "@heroicons/react/24/outline";
+import {
+  ChevronDownIcon,
+  PhoneIcon,
+  PlayCircleIcon,
+} from "@heroicons/react/20/solid";
+import Dashboard from "../dashboard/Dashboard"; // Import Dashboard component
 
 const products = [
-  { name: 'Analytics', description: 'Get a better understanding of your traffic', href: '#', icon: ChartPieIcon },
-  { name: 'Engagement', description: 'Speak directly to your customers', href: '#', icon: CursorArrowRaysIcon },
-  { name: 'Security', description: 'Your customers’ data will be safe and secure', href: '#', icon: FingerPrintIcon },
-  { name: 'Integrations', description: 'Connect with third-party tools', href: '#', icon: SquaresPlusIcon },
-  { name: 'Automations', description: 'Build strategic funnels that will convert', href: '#', icon: ArrowPathIcon },
-]
+  {
+    name: "Analytics",
+    description: "Get a better understanding of your traffic",
+    href: "#",
+    icon: ChartPieIcon,
+  },
+  {
+    name: "Engagement",
+    description: "Speak directly to your customers",
+    href: "#",
+    icon: CursorArrowRaysIcon,
+  },
+  {
+    name: "Security",
+    description: "Your customers’ data will be safe and secure",
+    href: "#",
+    icon: FingerPrintIcon,
+  },
+  {
+    name: "Integrations",
+    description: "Connect with third-party tools",
+    href: "#",
+    icon: SquaresPlusIcon,
+  },
+  {
+    name: "Automations",
+    description: "Build strategic funnels that will convert",
+    href: "#",
+    icon: ArrowPathIcon,
+  },
+];
 
 const callsToAction = [
-  { name: 'Watch demo', href: '#', icon: PlayCircleIcon },
-  { name: 'Contact sales', href: '#', icon: PhoneIcon },
-]
+  { name: "Watch demo", href: "#", icon: PlayCircleIcon },
+  { name: "Contact sales", href: "#", icon: PhoneIcon },
+];
 
 export default function Home({ isAdmin = false }) {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
     <div>
       {/* Header */}
       <header className="bg-gray-900 text-white">
-        <nav aria-label="Global" className="mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8">
+        <nav
+          aria-label="Global"
+          className="mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8"
+        >
           <div className="flex lg:flex-1">
             <a href="#" className="-m-1.5 p-1.5">
               <span className="sr-only">Your Company</span>
-              <img alt="" src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600" className="h-8 w-auto border border-indigo-600 p-1 rounded" />
+              <img
+                alt=""
+                src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
+                className="h-8 w-auto border border-indigo-600 p-1 rounded"
+              />
             </a>
           </div>
           <div className="flex lg:hidden">
@@ -66,7 +100,10 @@ export default function Home({ isAdmin = false }) {
             <Popover className="relative">
               <PopoverButton className="flex items-center gap-x-1 text-sm font-semibold leading-6 text-gray-200">
                 Product
-                <ChevronDownIcon aria-hidden="true" className="h-5 w-5 flex-none text-gray-400" />
+                <ChevronDownIcon
+                  aria-hidden="true"
+                  className="h-5 w-5 flex-none text-gray-400"
+                />
               </PopoverButton>
 
               <PopoverPanel
@@ -80,10 +117,16 @@ export default function Home({ isAdmin = false }) {
                       className="group relative flex items-center gap-x-6 rounded-lg p-4 text-sm leading-6 hover:bg-gray-700"
                     >
                       <div className="flex h-11 w-11 flex-none items-center justify-center rounded-lg bg-gray-700 group-hover:bg-gray-600">
-                        <item.icon aria-hidden="true" className="h-6 w-6 text-gray-400 group-hover:text-indigo-400" />
+                        <item.icon
+                          aria-hidden="true"
+                          className="h-6 w-6 text-gray-400 group-hover:text-indigo-400"
+                        />
                       </div>
                       <div className="flex-auto">
-                        <a href={item.href} className="block font-semibold text-gray-200">
+                        <a
+                          href={item.href}
+                          className="block font-semibold text-gray-200"
+                        >
                           {item.name}
                           <span className="absolute inset-0" />
                         </a>
@@ -99,7 +142,10 @@ export default function Home({ isAdmin = false }) {
                       href={item.href}
                       className="flex items-center justify-center gap-x-2.5 p-3 text-sm font-semibold leading-6 text-gray-200 hover:bg-gray-600"
                     >
-                      <item.icon aria-hidden="true" className="h-5 w-5 flex-none text-gray-400" />
+                      <item.icon
+                        aria-hidden="true"
+                        className="h-5 w-5 flex-none text-gray-400"
+                      />
                       {item.name}
                     </a>
                   ))}
@@ -107,41 +153,70 @@ export default function Home({ isAdmin = false }) {
               </PopoverPanel>
             </Popover>
 
-            <a href="#" className="text-sm font-semibold leading-6 text-gray-200">
+            <a
+              href="#"
+              className="text-sm font-semibold leading-6 text-gray-200"
+            >
               Features
             </a>
-            <a href="#" className="text-sm font-semibold leading-6 text-gray-200">
+            <a
+              href="#"
+              className="text-sm font-semibold leading-6 text-gray-200"
+            >
               Marketplace
             </a>
-            <a href="#" className="text-sm font-semibold leading-6 text-gray-200">
+            <a
+              href="#"
+              className="text-sm font-semibold leading-6 text-gray-200"
+            >
               Company
             </a>
             {isAdmin && (
               <Popover className="relative">
                 <PopoverButton className="flex items-center gap-x-1 text-sm font-semibold leading-6 text-gray-200">
                   Admin
-                  <ChevronDownIcon aria-hidden="true" className="h-5 w-5 flex-none text-gray-400" />
+                  <ChevronDownIcon
+                    aria-hidden="true"
+                    className="h-5 w-5 flex-none text-gray-400"
+                  />
                 </PopoverButton>
                 <PopoverPanel
                   transition
                   className="absolute -left-8 top-full z-10 mt-3 w-screen max-w-md overflow-hidden rounded-3xl bg-gray-800 shadow-lg ring-1 ring-gray-900/5 transition data-[closed]:translate-y-1 data-[closed]:opacity-0 data-[enter]:duration-200 data-[leave]:duration-150 data-[enter]:ease-out data-[leave]:ease-in"
                 >
                   <div className="p-4">
-                    <a href="#" className="block font-semibold text-gray-200 hover:bg-gray-700 p-2 rounded">Admin Dashboard</a>
-                    <a href="#" className="block font-semibold text-gray-200 hover:bg-gray-700 p-2 rounded">User Management</a>
+                    <a
+                      href="#"
+                      className="block font-semibold text-gray-200 hover:bg-gray-700 p-2 rounded"
+                    >
+                      Admin Dashboard
+                    </a>
+                    <a
+                      href="#"
+                      className="block font-semibold text-gray-200 hover:bg-gray-700 p-2 rounded"
+                    >
+                      User Management
+                    </a>
                   </div>
                 </PopoverPanel>
               </Popover>
             )}
           </PopoverGroup>
           <div className="hidden lg:flex lg:flex-1 lg:justify-end">
-            <a href="/my-profile" className="text-sm font-semibold leading-6 text-gray-200">
+            <a
+              href="/my-profile"
+              className="text-sm font-semibold leading-6 text-gray-200"
+            >
               <UserIcon className="h-6 w-6 inline-block" aria-hidden="true" />
               Profile <span aria-hidden="true">&rarr;</span>
             </a>
           </div>
         </nav>
-        <Dialog open={mobileMenuOpen} onClose={setMobileMenuOpen} className="lg:hidden">
+        <Dialog
+          open={mobileMenuOpen}
+          onClose={setMobileMenuOpen}
+          className="lg:hidden"
+        >
           <div className="fixed inset-0 z-10" />
           <DialogPanel className="fixed inset-y-0 right-0 z-10 w-full overflow-y-auto bg-gray-900 px-6 py-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10">
             <div className="flex items-center justify-between">
@@ -185,18 +260,30 @@ export default function Home({ isAdmin = false }) {
                       ))}
                     </DisclosurePanel>
                   </Disclosure>
-                  <a href="#" className="block rounded-lg py-2 pl-3 pr-3 text-base font-semibold leading-7 text-gray-200 hover:bg-gray-700">
+                  <a
+                    href="#"
+                    className="block rounded-lg py-2 pl-3 pr-3 text-base font-semibold leading-7 text-gray-200 hover:bg-gray-700"
+                  >
                     Features
                   </a>
-                  <a href="#" className="block rounded-lg py-2 pl-3 pr-3 text-base font-semibold leading-7 text-gray-200 hover:bg-gray-700">
+                  <a
+                    href="#"
+                    className="block rounded-lg py-2 pl-3 pr-3 text-base font-semibold leading-7 text-gray-200 hover:bg-gray-700"
+                  >
                     Marketplace
                   </a>
-                  <a href="#" className="block rounded-lg py-2 pl-3 pr-3 text-base font-semibold leading-7 text-gray-200 hover:bg-gray-700">
+                  <a
+                    href="#"
+                    className="block rounded-lg py-2 pl-3 pr-3 text-base font-semibold leading-7 text-gray-200 hover:bg-gray-700"
+                  >
                     Company
                   </a>
                 </div>
                 <div className="py-6">
-                  <a href="/my-profile" className="block rounded-lg py-2.5 px-3 text-base font-semibold leading-7 text-gray-200 hover:bg-gray-700">
+                  <a
+                    href="/my-profile"
+                    className="block rounded-lg py-2.5 px-3 text-base font-semibold leading-7 text-gray-200 hover:bg-gray-700"
+                  >
                     Profile
                   </a>
                 </div>
@@ -205,9 +292,9 @@ export default function Home({ isAdmin = false }) {
           </DialogPanel>
         </Dialog>
       </header>
-
       {/* Dashboard Component */}
       <Dashboard /> {/* Include Dashboard component here */}
+      <div>TEST</div>
     </div>
-  )
+  );
 }
