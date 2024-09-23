@@ -1,25 +1,31 @@
 import React, { useState, useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { UserService } from "../../api/api";
+import { updateProfile } from "../../redux/profileSlice";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 const EditProfile = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const profile = useSelector((state) => state.profile);
+
   const [profileImage, setProfileImage] = useState(null);
-  const [name, setName] = useState(""); // Changed here
-  const [email, setEmail] = useState("");
-  const [phone, setPhone] = useState("");
+  const [name, setName] = useState(profile.name);
+  const [email, setEmail] = useState(profile.email);
+  const [phone, setPhone] = useState(profile.phone);
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
-  const [address, setAddress] = useState("");
-  const [birthDate, setBirthDate] = useState("");
-  const [gender, setGender] = useState("");
-  const [bio, setBio] = useState("");
-  const [privacy, setPrivacy] = useState("public");
+  const [address, setAddress] = useState(profile.address);
+  const [birthDate, setBirthDate] = useState(profile.birthDate);
+  const [gender, setGender] = useState(profile.gender);
+  const [bio, setBio] = useState(profile.bio);
+  const [privacy, setPrivacy] = useState(profile.privacy);
   const [errors, setErrors] = useState({});
   const [showCurrentPassword, setShowCurrentPassword] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
 
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const fileInputRef = React.createRef();
 
   const handleImageChange = (e) => {
@@ -45,6 +51,21 @@ const EditProfile = () => {
 
   const handleSave = (e) => {
     e.preventDefault();
+
+    // Save the updated profile to the Redux store
+    dispatch(
+      updateProfile({
+        profileImage,
+        name,
+        email,
+        phone,
+        address,
+        birthDate,
+        gender,
+        bio,
+        privacy,
+      })
+    );
 
     if (validateForm()) {
       // Save changes logic

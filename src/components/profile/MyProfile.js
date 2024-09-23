@@ -1,19 +1,24 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
 import { AuthService, UserService } from "../../api/api";
 import { FaEdit, FaSignOutAlt } from "react-icons/fa";
+import { setProfile } from "../../redux/profileSlice";
 
 const MyProfile = () => {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [email, setEmail] = useState("");
-  const [firstName, setFirstName] = useState("");
-  const [phone, setPhone] = useState("");
-  const [address, setAddress] = useState("");
-  const [birthDate, setBirthDate] = useState("");
-  const [gender, setGender] = useState("");
-  const [bio, setBio] = useState("");
-  const [privacy, setPrivacy] = useState("");
-  const [profileImage, setProfileImage] = useState(""); // State for profile image
+  const profile = useSelector((state) => state.profile);
+
+  // const [email, setEmail] = useState("");
+  // const [firstName, setFirstName] = useState("");
+  // const [phone, setPhone] = useState("");
+  // const [address, setAddress] = useState("");
+  // const [birthDate, setBirthDate] = useState("");
+  // const [gender, setGender] = useState("");
+  // const [bio, setBio] = useState("");
+  // const [privacy, setPrivacy] = useState("");
+  // const [profileImage, setProfileImage] = useState(""); // State for profile image
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -21,19 +26,21 @@ const MyProfile = () => {
     const fetchProfile = async () => {
       try {
         const response = await UserService.GetProfile();
-        console.log(response.data);
-        setFirstName(response.data.user.name);
-        setEmail(response.data.user.email);
-        setPhone(response.data.user.phone || "No phone number");
-        setAddress(response.data.user.address || "No address");
-        setBirthDate(response.data.user.birthDate || "No birth date");
-        setGender(response.data.user.gender || "No gender");
-        setBio(response.data.user.bio || "No bio available");
-        setPrivacy(response.data.user.privacy || "No privacy settings");
-        setProfileImage(
-          response.data.user.profileImage ||
-            "https://cdn-icons-png.flaticon.com/512/847/847969.png"
-        ); // Default image
+        dispatch(
+          setProfile({
+            name: response.data.user.name,
+            email: response.data.user.email,
+            phone: response.data.user.phone || "No phone number",
+            address: response.data.user.address || "No address",
+            birthDate: response.data.user.birthDate || "No birth date",
+            gender: response.data.user.gender || "No gender",
+            bio: response.data.user.bio || "No bio available",
+            privacy: response.data.user.privacy || "No privacy settings",
+            profileImage:
+              response.data.user.profileImage ||
+              "https://cdn-icons-png.flaticon.com/512/847/847969.png", // Default image
+          })
+        );
       } catch (error) {
         console.log("Error fetching user:", error);
         setError("Error fetching user profile");
@@ -41,7 +48,7 @@ const MyProfile = () => {
     };
 
     fetchProfile();
-  }, []);
+  }, [dispatch]);
 
   const handleEditProfile = () => {
     navigate("/edit-profile");
@@ -71,7 +78,7 @@ const MyProfile = () => {
         {/* Profile Picture */}
         <div className="flex justify-center mb-6">
           <img
-            src={profileImage}
+            src={profile.profileImage}
             alt="Profile"
             className="h-24 w-24 rounded-full object-cover border-2 border-gray-600"
           />
@@ -80,26 +87,26 @@ const MyProfile = () => {
         {/* Basic Information */}
         <div className="mb-4">
           <h3 className="text-lg font-semibold">Basic Information</h3>
-          <p>Name: {firstName}</p>
-          <p>Email: {email}</p>
+          <p>Name: {profile.name}</p>
+          <p>Email: {profile.email}</p>
         </div>
         {/* Contact Information */}
         <div className="mb-4">
           <h3 className="text-lg font-semibold">Contact Information</h3>
-          <p>Phone: {phone}</p>
-          <p>Address: {address}</p>
+          <p>Phone: {profile.phone}</p>
+          <p>Address: {profile.address}</p>
         </div>
         {/* Bio */}
         <div className="mb-4">
           <h3 className="text-lg font-semibold">Bio</h3>
-          <p>{bio}</p>
+          <p>{profile.bio}</p>
         </div>
         {/* Additional Information */}
         <div className="mb-4">
           <h3 className="text-lg font-semibold">Additional Information</h3>
-          <p>Birth Date: {birthDate}</p>
-          <p>Gender: {gender}</p>
-          <p>Privacy Settings: {privacy}</p>
+          <p>Birth Date: {profile.birthDate}</p>
+          <p>Gender: {profile.gender}</p>
+          <p>Privacy Settings: {profile.privacy}</p>
         </div>
 
         {/* Buttons for Editing and Logging Out */}
