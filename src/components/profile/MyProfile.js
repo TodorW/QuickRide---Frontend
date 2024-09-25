@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { AuthService, UserService } from "../../api/api";
-import { FaEdit, FaSignOutAlt } from "react-icons/fa";
+import { FaEdit, FaSignOutAlt, FaHome } from "react-icons/fa";
 import { setProfile } from "../../redux/profileSlice";
 
 const MyProfile = () => {
@@ -66,6 +66,10 @@ const MyProfile = () => {
     }
   };
 
+  const handleGoHome = () => {
+    navigate("/"); // Navigate to home page
+  };
+
   if (error) {
     return <div>Error: {error}</div>;
   }
@@ -124,6 +128,13 @@ const MyProfile = () => {
           >
             <FaSignOutAlt className="mr-2" />
             Logout
+          </button>
+          <button
+            onClick={handleGoHome}
+            className="bg-green-600 hover:bg-green-700 text-white py-2 px-4 rounded-md flex items-center"
+          >
+            <FaHome className="mr-2" />
+            Back to Home
           </button>
         </div>
       </div>
