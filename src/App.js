@@ -10,17 +10,19 @@ import SignUp from "./components/auth/SignUp";
 import MyProfile from "./components/profile/MyProfile"; // Import MyProfile component
 import EditProfile from "./components/profile/EditProfile";
 import Home from "./components/home/Home";
+import ReviewForm from "./components/reviews/ReviewForm";
 
 function App() {
   return (
     <Router>
       <Routes>
-      <Route path="/" element={<Navigate to="/home" />} />
+        <Route path="/" element={<Navigate to="/home" />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="/my-profile" element={<MyProfile />} />
         <Route path="/edit-profile" element={<EditProfile />} />
         <Route path="/home" element={<Home />} />
+        <Route path="/add-review" element={<ReviewForm />} />
       </Routes>
     </Router>
   );
