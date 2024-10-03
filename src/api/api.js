@@ -94,6 +94,6 @@ export const CarService = {
     return client.get("cars");
   },
   GetCar(id) {
-    return client.get(`car/${id}`);
+    return client.get(`cars/${id}`);
   },
 };
