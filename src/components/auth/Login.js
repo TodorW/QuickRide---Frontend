@@ -15,7 +15,7 @@ const Login = () => {
     const token = localStorage.getItem("BearerToken");
     if (token) {
       // If token exist's, user has already logged in
-      navigate("home"); // Navigate user to other page
+      navigate("/home"); // Navigate user to other page
     }
   };
 

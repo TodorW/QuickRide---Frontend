@@ -27,17 +27,14 @@ const Cars = () => {
           Discover Cars
         </h1>
 
-        <div
-          className="grid grid-cols-1 gap-y-10 sm:grid-cols-2 gap-x-6 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-8"
-          onClick={() => navigate(`car/id`)}
-        >
+        <div className="grid grid-cols-1 gap-y-10 sm:grid-cols-2 gap-x-6 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-8">
           {cars.map((car, index) => (
             <div
               key={car.id}
               className="overflow-hidden transition duration-300 transform bg-white rounded-lg shadow-md group dark:bg-gray-800 hover:scale-105 hover:shadow-xl animate-fade-in-up"
               style={{ animationDelay: `${index * 100}ms` }}
             >
-              <a href="#" className="block">
+              <a href={`car/${car.id}`} className="block">
                 <div className="relative aspect-w-2 aspect-h-3">
                   <img
                     src={`http://127.0.0.1:8000/storage/cars-images/${car.image}`}
