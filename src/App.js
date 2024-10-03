@@ -12,6 +12,7 @@ import EditProfile from "./components/profile/EditProfile";
 import Home from "./components/home/Home";
 import ReviewForm from "./components/reviews/ReviewForm";
 import Car from "./components/single-car/Car";
+import ReserveCar from "./components/reserve-car/ReserveCar";
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
         <Route path="/edit-profile" element={<EditProfile />} />
         <Route path="/home" element={<Home />} />
         <Route path="/car/:id" element={<Car />} />
+        <Route path="/car-reserve/:id" element={<ReserveCar />} />
         <Route path="/add-review" element={<ReviewForm />} />
       </Routes>
     </Router>
