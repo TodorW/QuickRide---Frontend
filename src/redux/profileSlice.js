@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit"; // i use this for the first time, i follow the tutorial
+import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   profileImage: null,

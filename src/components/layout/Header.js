@@ -175,16 +175,16 @@ const Header = () => {
           <a href="#" className="text-sm font-semibold leading-6 text-gray-200">
             Company
           </a>
-          {isAdmin && (
+          {isAdmin ? (
             <Popover className="relative">
-              <PopoverButton className="flex items-center gap-x-1 text-sm font-semibold leading-6 text-gray-200">
+              <Popover.Button className="flex items-center gap-x-1 text-sm font-semibold leading-6 text-gray-200">
                 Admin
                 <ChevronDownIcon
                   aria-hidden="true"
                   className="h-5 w-5 flex-none text-gray-400"
                 />
-              </PopoverButton>
-              <PopoverPanel
+              </Popover.Button>
+              <Popover.Panel
                 transition
                 className="absolute -left-8 top-full z-10 mt-3 w-screen max-w-md overflow-hidden rounded-3xl bg-gray-800 shadow-lg ring-1 ring-gray-900/5 transition data-[closed]:translate-y-1 data-[closed]:opacity-0 data-[enter]:duration-200 data-[leave]:duration-150 data-[enter]:ease-out data-[leave]:ease-in"
               >
@@ -196,8 +196,10 @@ const Header = () => {
                     Admin Dashboard
                   </a>
                 </div>
-              </PopoverPanel>
+              </Popover.Panel>
             </Popover>
+          ) : (
+            <div></div>
           )}
         </PopoverGroup>
         <div className="hidden lg:flex lg:flex-1 lg:justify-end">

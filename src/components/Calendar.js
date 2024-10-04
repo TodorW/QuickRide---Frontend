@@ -1,24 +1,26 @@
-import { useState } from 'react'
-import DatePicker from 'react-datepicker'
-import 'react-datepicker/dist/react-datepicker.css'
-import { Dialog } from '@headlessui/react'
+import { useState } from "react";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import { Dialog } from "@headlessui/react";
 
 export default function CarReservationCalendar({ selectedCar }) {
-  const [isOpen, setIsOpen] = useState(false)
-  const [startDate, setStartDate] = useState(null)
-  const [endDate, setEndDate] = useState(null)
+  const [isOpen, setIsOpen] = useState(false);
+  const [startDate, setStartDate] = useState(null);
+  const [endDate, setEndDate] = useState(null);
 
-  const openModal = () => setIsOpen(true)
-  const closeModal = () => setIsOpen(false)
+  const openModal = () => setIsOpen(true);
+  const closeModal = () => setIsOpen(false);
 
   const handleReservation = () => {
     if (startDate && endDate) {
-      alert(`Car reserved from ${startDate.toLocaleDateString()} to ${endDate.toLocaleDateString()}`)
-      closeModal()
+      alert(
+        `Car reserved from ${startDate.toLocaleDateString()} to ${endDate.toLocaleDateString()}`
+      );
+      closeModal();
     } else {
-      alert('Please select both start and end dates!')
+      alert("Please select both start and end dates!");
     }
-  }
+  };
 
   return (
     <div>
@@ -27,22 +29,28 @@ export default function CarReservationCalendar({ selectedCar }) {
         onClick={openModal}
         className="bg-indigo-600 text-white px-4 py-2 rounded-md"
       >
-        Reserve {selectedCar ? selectedCar.name : 'Car'}
+        Reserve {selectedCar ? selectedCar.name : "Car"}
       </button>
 
       {}
-      <Dialog open={isOpen} onClose={closeModal} className="fixed z-10 inset-0 overflow-y-auto">
+      <Dialog
+        open={isOpen}
+        onClose={closeModal}
+        className="fixed z-10 inset-0 overflow-y-auto"
+      >
         <div className="flex items-center justify-center min-h-screen">
           <Dialog.Overlay className="fixed inset-0 bg-black bg-opacity-30" />
-          
+
           <div className="relative bg-white rounded-lg max-w-md mx-auto p-6 shadow-lg">
             <Dialog.Title className="text-lg font-semibold">
               Select Reservation Dates
             </Dialog.Title>
-            
+
             {}
             <div className="mt-4">
-              <label className="block text-sm font-medium text-gray-700">Start Date</label>
+              <label className="block text-sm font-medium text-gray-700">
+                Start Date
+              </label>
               <DatePicker
                 selected={startDate}
                 onChange={(date) => setStartDate(date)}
@@ -56,7 +64,9 @@ export default function CarReservationCalendar({ selectedCar }) {
 
             {}
             <div className="mt-4">
-              <label className="block text-sm font-medium text-gray-700">End Date</label>
+              <label className="block text-sm font-medium text-gray-700">
+                End Date
+              </label>
               <DatePicker
                 selected={endDate}
                 onChange={(date) => setEndDate(date)}
@@ -87,5 +97,5 @@ export default function CarReservationCalendar({ selectedCar }) {
         </div>
       </Dialog>
     </div>
-  )
+  );
 }
