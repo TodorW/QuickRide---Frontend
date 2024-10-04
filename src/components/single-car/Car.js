@@ -28,7 +28,7 @@ const Car = () => {
   return (
     <div className="bg-gray-900 min-h-screen text-gray-100">
       <Header />
-      <div className="pt-6">
+      <div className="pt-6 pb-4">
         {/* Breadcrumb */}
         {/* <nav aria-label="Breadcrumb">
           <ol
@@ -90,7 +90,7 @@ const Car = () => {
               </div>
             </div> */}
 
-            {/*Product Availability */}
+            {/* Product Availability
             <div className="mt-4">
               <span
                 className={`inline-block px-3 py-1 rounded-full text-sm font-semibold text-white ${
@@ -99,7 +99,7 @@ const Car = () => {
               >
                 {availabilityText}
               </span>
-            </div>
+            </div> */}
 
             {/* Product Specifications */}
             <div className="mt-8 grid grid-cols-2 gap-6 text-gray-300">
