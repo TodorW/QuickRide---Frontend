@@ -6,6 +6,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import Popup from "../components/Popup"; // Importujte Popup komponentu
+import Search from "../components/Search"; // Importujte Search komponentu
 
 const Car = () => {
   const [car, setCar] = useState([]);
@@ -15,6 +16,7 @@ const Car = () => {
   const navigate = useNavigate();
   const [popupMessage, setPopupMessage] = useState("");
   const [showPopup, setShowPopup] = useState(false);
+  const [cars, setCars] = useState([]); // Dodato za pretragu
 
   useEffect(() => {
     const fetchCars = async () => {
@@ -46,6 +48,7 @@ const Car = () => {
   return (
     <div className="bg-gray-900 min-h-screen text-gray-100">
       <Header />
+      <Search setCars={setCars} /> {/* Dodano za pretragu automobila */}
       <div className="pt-6 pb-4">
         {/* Breadcrumb */}
         {/* <nav aria-label="Breadcrumb">
