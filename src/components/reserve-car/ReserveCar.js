@@ -49,8 +49,17 @@ const ReserveCar = () => {
       return;
     }
 
-    const formattedStartDate = startDate.toISOString().split("T")[0];
-    const formattedEndDate = endDate.toISOString().split("T")[0];
+    const adjustedStartDate = new Date(startDate);
+    adjustedStartDate.setDate(adjustedStartDate.getDate() + 1);
+
+    const adjustedEndDate = new Date(endDate);
+    adjustedEndDate.setDate(adjustedEndDate.getDate() + 1);
+
+    const formattedStartDate = adjustedStartDate.toISOString().split("T")[0];
+    const formattedEndDate = adjustedEndDate.toISOString().split("T")[0];
+
+    console.log("Start date:", startDate.toISOString());
+    console.log("End date:", endDate.toISOString());
 
     const reservationData = {
       car_id: car.id,
@@ -58,6 +67,8 @@ const ReserveCar = () => {
       start_date: formattedStartDate,
       end_date: formattedEndDate,
     };
+
+    console.log("Sending reservation data:", reservationData);
 
     try {
       const response = await ReservationService.StoreReservation(
