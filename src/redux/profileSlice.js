@@ -1,23 +1,15 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  profileImage: null,
-  name: "",
-  email: "",
-  phone: "",
-  address: "",
-  birthDate: "",
-  gender: "",
-  bio: "",
-  privacy: "public",
+  selectedUser: null,
 };
 
 const profileSlice = createSlice({
   name: "profile",
   initialState,
   reducers: {
-    setProfile: (state, action) => {
-      return { ...state, ...action.payload };
+    setSelectedUser: (state, action) => {
+      state.selectedUser = action.payload;
     },
     updateProfile: (state, action) => {
       return { ...state, ...action.payload };
@@ -25,6 +17,6 @@ const profileSlice = createSlice({
   },
 });
 
-export const { setProfile, updateProfile } = profileSlice.actions;
+export const { setSelectedUser, updateUser } = profileSlice.actions;
 
 export default profileSlice.reducer;

@@ -97,3 +97,9 @@ export const CarService = {
     return client.get(`cars/${id}`);
   },
 };
+
+export const ReservationService = {
+  StoreReservation(reservationData) {
+    return client.post("reservations", reservationData);
+  },
+};

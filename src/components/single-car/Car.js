@@ -3,11 +3,13 @@ import { StarIcon } from "@heroicons/react/20/solid";
 import Header from "../layout/Header";
 import { CarService } from "../../api/api";
 import { useNavigate, useParams } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { setSelectedCar } from "../../redux/carSlice";
 
 const Car = () => {
   const [car, setCar] = useState([]);
   const { id } = useParams();
-
+  const dispatch = useDispatch();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -16,6 +18,7 @@ const Car = () => {
         const response = await CarService.GetCar(id);
         console.log(response.data);
         setCar(response.data.car);
+        dispatch(setSelectedCar(response.data.car));
       } catch (error) {
         console.log("Error fetching cars:", error);
       }
