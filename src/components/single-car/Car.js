@@ -3,9 +3,13 @@ import { StarIcon } from "@heroicons/react/20/solid";
 import Header from "../layout/Header";
 import { CarService } from "../../api/api";
 import { useNavigate, useParams } from "react-router-dom";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 const Car = () => {
   const [car, setCar] = useState([]);
+  const [startDate, setStartDate] = useState(null); // Početni datum rezervacije
+  const [endDate, setEndDate] = useState(null);     // Krajnji datum rezervacije
   const { id } = useParams();
   const navigate = useNavigate();
 
@@ -20,7 +24,7 @@ const Car = () => {
       }
     };
     fetchCars();
-  }, []);
+  }, [id]);
 
   const availabilityText = car.availability ? "Available" : "Not Available";
 
@@ -55,6 +59,33 @@ const Car = () => {
               alt={`${car.make} ${car.model}`}
               className="w-full h-auto object-contain"
             />
+            {/* DatePicker component for reservation calendar */}
+            <div className="mt-4">
+              <h3 className="text-lg font-medium text-gray-100 mb-2">
+                Select Reservation Dates
+              </h3>
+              <div className="flex space-x-4">
+                <DatePicker
+                  selected={startDate}
+                  onChange={(date) => setStartDate(date)}
+                  selectsStart
+                  startDate={startDate}
+                  endDate={endDate}
+                  placeholderText="Start Date"
+                  className="text-gray-900 px-2 py-1 rounded-md"
+                />
+                <DatePicker
+                  selected={endDate}
+                  onChange={(date) => setEndDate(date)}
+                  selectsEnd
+                  startDate={startDate}
+                  endDate={endDate}
+                  minDate={startDate}
+                  placeholderText="End Date"
+                  className="text-gray-900 px-2 py-1 rounded-md"
+                />
+              </div>
+            </div>
           </div>
 
           {/* Product info on the right */}
@@ -89,7 +120,7 @@ const Car = () => {
               </div>
             </div> */}
 
-            {/* Product Availability
+            {/* Product Availability */}
             <div className="mt-4">
               <span
                 className={`inline-block px-3 py-1 rounded-full text-sm font-semibold text-white ${
@@ -98,7 +129,7 @@ const Car = () => {
               >
                 {availabilityText}
               </span>
-            </div> */}
+            </div>
 
             {/* Product Specifications */}
             <div className="mt-8 grid grid-cols-2 gap-6 text-gray-300">
@@ -147,15 +178,7 @@ const Car = () => {
               <h3 className="text-lg font-medium text-gray-100">Description</h3>
               <p className="mt-4 text-base text-gray-300">{car.description}</p>
             </div>
-            {/*
-            <h3 className="text-sm font-medium text-gray-100 mt-10">
-              Highlights
-            </h3>
-             <ul className="list-disc pl-4 text-sm text-gray-300 mt-4">
-                {product.highlights.map((highlight) => (
-                  <li key={highlight}>{highlight}</li>
-                ))}
-              </ul> */}
+
             <button
               onClick={() => navigate(`/car-reserve/${car.id}`)}
               className="w-full px-4 py-2 mt-8 text-lg font-semibold text-white bg-indigo-600 rounded-md hover:bg-indigo-700"
