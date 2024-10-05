@@ -105,4 +105,7 @@ export const ReservationService = {
   StoreReservation(reservationData) {
     return client.post("reservations", reservationData);
   },
+  ListCarsReservedDates(carId) {
+    return client.get(`reservations/${carId}/reserved-dates`);
+  },
 };

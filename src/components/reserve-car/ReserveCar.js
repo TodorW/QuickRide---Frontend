@@ -1,7 +1,10 @@
 import { useEffect, useState } from "react";
 import { CarService, ReservationService, UserService } from "../../api/api";
 import { useNavigate, useParams } from "react-router-dom";
+import { addYears } from "date-fns";
 import Header from "../layout/Header";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 const ReserveCar = () => {
   const [startDate, setStartDate] = useState("");
@@ -9,6 +12,7 @@ const ReserveCar = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const [car, setCar] = useState([]);
   const [user, setUser] = useState([]);
+  const [reservedDates, setReservedDates] = useState([]);
   const [totalPrice, setTotalPrice] = useState(0);
   const navigate = useNavigate();
 
@@ -45,11 +49,14 @@ const ReserveCar = () => {
       return;
     }
 
+    const formattedStartDate = startDate.toISOString().split("T")[0];
+    const formattedEndDate = endDate.toISOString().split("T")[0];
+
     const reservationData = {
       car_id: car.id,
       user_id: user.id,
-      start_date: startDate,
-      end_date: endDate,
+      start_date: formattedStartDate,
+      end_date: formattedEndDate,
     };
 
     try {
@@ -58,22 +65,7 @@ const ReserveCar = () => {
       );
       console.log("API Response", response);
     } catch (error) {
-      console.log("Error sending ratings:", error);
-    }
-  };
-
-  const checkAvailability = async () => {
-    const availabilityData = {
-      car_id: car.id,
-      start_date: startDate,
-      end_date: endDate,
-    };
-
-    try {
-      const response = await CarService.GetAvailability(availabilityData);
-      console.log("API Response", response);
-    } catch (error) {
-      console.log("Error sending ratings:", error);
+      console.log("Error sending reservation:", error);
     }
   };
 
@@ -94,6 +86,36 @@ const ReserveCar = () => {
     calculateTotalPrice();
   }, [startDate, endDate]);
 
+  useEffect(() => {
+    const fetchReservedDates = async () => {
+      try {
+        const response = await ReservationService.ListCarsReservedDates(car.id);
+        setReservedDates(response.data.reserved_dates);
+        console.log(reservedDates);
+      } catch (error) {
+        console.log("Error fetching reserved dates:", error);
+      }
+    };
+    fetchReservedDates();
+  }, [car.id]);
+
+  const isDateDisabled = (date) => {
+    const selectedDate = new Date(date);
+
+    return !reservedDates.some((reservedDate) => {
+      const formattedReservedDate = new Date(reservedDate);
+
+      return (
+        selectedDate.getFullYear() === formattedReservedDate.getFullYear() &&
+        selectedDate.getMonth() === formattedReservedDate.getMonth() &&
+        selectedDate.getDate() === formattedReservedDate.getDate()
+      );
+    });
+  };
+
+  const today = new Date();
+  const maxDate = addYears(today, 1);
+
   return (
     <div className="bg-gray-900 min-h-screen text-gray-100">
       <Header />
@@ -109,6 +131,7 @@ const ReserveCar = () => {
             id="car"
             className="block w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-md"
             value={car}
+            disabled
           >
             <option key={car.id} value={car.id}>
               {car.make} {car.model} - ${car.price_per_day} per day
@@ -123,12 +146,20 @@ const ReserveCar = () => {
           >
             Start date:
           </label>
-          <input
-            type="date"
+          <DatePicker
             id="start_date"
+            selected={startDate}
+            onChange={(date) => setStartDate(date)}
+            minDate={new Date()}
+            maxDate={maxDate}
+            filterDate={isDateDisabled}
+            dayClassName={(date) =>
+              isDateDisabled(date)
+                ? "bg-indigo-600 text-white cursor-pointer"
+                : " text-white cursor-not-allowed"
+            }
             className="block w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-md"
-            value={startDate}
-            onChange={(e) => setStartDate(e.target.value)}
+            placeholderText="Select start date"
           />
         </div>
 
@@ -136,12 +167,20 @@ const ReserveCar = () => {
           <label htmlFor="end_date" className="block mb-2 text-sm font-medium">
             End date:
           </label>
-          <input
-            type="date"
+          <DatePicker
             id="end_date"
+            selected={endDate}
+            onChange={(date) => setEndDate(date)}
+            minDate={startDate || new Date()}
+            maxDate={maxDate}
+            filterDate={isDateDisabled}
+            dayClassName={(date) =>
+              isDateDisabled(date)
+                ? "bg-indigo-600 text-white cursor-pointer"
+                : " text-white cursor-not-allowed"
+            }
             className="block w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-md"
-            value={endDate}
-            onChange={(e) => setEndDate(e.target.value)}
+            placeholderText="Select end date"
           />
         </div>
 

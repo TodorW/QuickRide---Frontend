@@ -54,7 +54,7 @@ const Cars = () => {
                   {car.year} - {car.transmission} - {car.fuel_type}
                 </p>
                 <p className="mt-1 text-sm font-medium text-gray-700 dark:text-gray-300">
-                  Price per day: ${car.price_per_day}
+                  Cena po danu: ${car.price_per_day}
                 </p>
                 <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
                   {car.description}
@@ -66,7 +66,7 @@ const Cars = () => {
                   Details
                 </button>
                 <button
-                  onClick={navigate(`/car-reserve/${car.id}`)}
+                  onClick={() => navigate(`/car-reserve/${car.id}`)}
                   className="w-full px-4 py-2 mt-4 text-sm font-semibold text-white bg-indigo-600 rounded-md hover:bg-indigo-700 dark:bg-indigo-500 dark:hover:bg-indigo-600"
                 >
                   Reserve
