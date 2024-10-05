@@ -96,6 +96,9 @@ export const CarService = {
   GetCar(id) {
     return client.get(`cars/${id}`);
   },
+  GetAvailability(availabilityData) {
+    return client.post("cars/check-availability", availabilityData);
+  },
 };
 
 export const ReservationService = {

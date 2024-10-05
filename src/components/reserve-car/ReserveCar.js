@@ -1,26 +1,56 @@
-import { useState, useEffect } from "react";
-import { ReservationService } from "../../api/api";
-import { useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useEffect, useState } from "react";
+import { CarService, ReservationService, UserService } from "../../api/api";
+import { useNavigate, useParams } from "react-router-dom";
 import Header from "../layout/Header";
 
 const ReserveCar = () => {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+  const [car, setCar] = useState([]);
+  const [user, setUser] = useState([]);
+  const [totalPrice, setTotalPrice] = useState(0);
   const navigate = useNavigate();
 
-  const selectedCar = useSelector((state) => state.car.selectedCar);
-  const selectedUser = useSelector((state) => state.profile.selectedUser);
-  const userId = useSelector((state) => state.profile.id);
+  const { id } = useParams();
+
+  useEffect(() => {
+    const fetchCars = async () => {
+      try {
+        const response = await CarService.GetCar(id);
+        console.log(response.data);
+        setCar(response.data.car);
+      } catch (error) {
+        console.log("Error fetching cars:", error);
+      }
+    };
+    fetchCars();
+  }, []);
+
+  useEffect(() => {
+    const fetchProfile = async () => {
+      try {
+        const response = await UserService.GetProfile();
+        setUser(response.data.user);
+      } catch (error) {
+        console.log("Error fetching user:", error);
+      }
+    };
+    fetchProfile();
+  }, []);
 
   const handleSendReservations = async () => {
-    if (!selectedCar || !startDate || !endDate) {
+    if (!car || !startDate || !endDate) {
       setErrorMessage("Please fill in all fields.");
       return;
     }
 
-    const reservationData = { carId: selectedCar.id };
+    const reservationData = {
+      car_id: car.id,
+      user_id: user.id,
+      start_date: startDate,
+      end_date: endDate,
+    };
 
     try {
       const response = await ReservationService.StoreReservation(
@@ -31,6 +61,38 @@ const ReserveCar = () => {
       console.log("Error sending ratings:", error);
     }
   };
+
+  const checkAvailability = async () => {
+    const availabilityData = {
+      car_id: car.id,
+      start_date: startDate,
+      end_date: endDate,
+    };
+
+    try {
+      const response = await CarService.GetAvailability(availabilityData);
+      console.log("API Response", response);
+    } catch (error) {
+      console.log("Error sending ratings:", error);
+    }
+  };
+
+  const calculateTotalPrice = () => {
+    if (startDate && endDate) {
+      const start = new Date(startDate);
+      const end = new Date(endDate);
+      const diffTime = Math.abs(end - start);
+      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+      const total = diffDays * car.price_per_day;
+      setTotalPrice(total);
+    } else {
+      setTotalPrice(0);
+    }
+  };
+
+  useEffect(() => {
+    calculateTotalPrice();
+  }, [startDate, endDate]);
 
   return (
     <div className="bg-gray-900 min-h-screen text-gray-100">
@@ -46,11 +108,10 @@ const ReserveCar = () => {
           <select
             id="car"
             className="block w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-md"
-            value={selectedCar}
+            value={car}
           >
-            <option key={selectedCar?.id} value={selectedCar?.id}>
-              {selectedCar?.make} {selectedCar?.model} - $
-              {selectedCar?.price_per_day} per day
+            <option key={car.id} value={car.id}>
+              {car.make} {car.model} - ${car.price_per_day} per day
             </option>
           </select>
         </div>
@@ -83,6 +144,12 @@ const ReserveCar = () => {
             onChange={(e) => setEndDate(e.target.value)}
           />
         </div>
+
+        {totalPrice !== null && (
+          <div className="mt-4 text-lg">
+            <p>Total price: ${totalPrice}</p>
+          </div>
+        )}
 
         <button
           onClick={handleSendReservations}

@@ -1,14 +1,11 @@
 import { useNavigate } from "react-router-dom";
 import { CarService } from "../../api/api";
 import { useState, useEffect } from "react";
-import { setSelectedCar } from "../../redux/carSlice";
-import { useDispatch } from "react-redux";
 
 const Cars = () => {
   const [cars, setCars] = useState([]);
 
   const navigate = useNavigate();
-  const dispatch = useDispatch();
 
   useEffect(() => {
     const fetchCars = async () => {
@@ -22,11 +19,6 @@ const Cars = () => {
     };
     fetchCars();
   }, []);
-
-  const handleReserve = (car) => {
-    dispatch(setSelectedCar(car));
-    navigate(`/car-reserve/${car.id}`);
-  };
 
   return (
     <div className="min-h-screen py-12 transition-colors duration-300 bg-gray-100 dark:bg-gray-900">
@@ -74,7 +66,7 @@ const Cars = () => {
                   Details
                 </button>
                 <button
-                  onClick={() => handleReserve(car)}
+                  onClick={navigate(`/car-reserve/${car.id}`)}
                   className="w-full px-4 py-2 mt-4 text-sm font-semibold text-white bg-indigo-600 rounded-md hover:bg-indigo-700 dark:bg-indigo-500 dark:hover:bg-indigo-600"
                 >
                   Reserve
