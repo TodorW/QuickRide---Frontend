@@ -5,6 +5,8 @@ import { CarService } from "../../api/api";
 import { useNavigate, useParams } from "react-router-dom";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import Popup from "../components/Popup"; // Importujte Popup komponentu
+import Search from "../components/Search"; // Importujte Search komponentu
 
 const Car = () => {
   const [car, setCar] = useState([]);
@@ -12,6 +14,9 @@ const Car = () => {
   const [endDate, setEndDate] = useState(null); // Krajnji datum rezervacije
   const { id } = useParams();
   const navigate = useNavigate();
+  const [popupMessage, setPopupMessage] = useState("");
+  const [showPopup, setShowPopup] = useState(false);
+  const [cars, setCars] = useState([]); // Dodato za pretragu
 
   useEffect(() => {
     const fetchCars = async () => {
@@ -28,9 +33,22 @@ const Car = () => {
 
   const availabilityText = car.availability ? "Available" : "Not Available";
 
+  const handleReserve = async () => {
+    try {
+      await CarService.ReserveCar(id, { startDate, endDate });
+      setPopupMessage("Zahtev je poslat, obavestićemo vas na mejl.");
+      setShowPopup(true);
+    } catch (error) {
+      console.error("Error during reservation:", error);
+      setPopupMessage("Došlo je do greške prilikom rezervacije.");
+      setShowPopup(true);
+    }
+  };
+
   return (
     <div className="bg-gray-900 min-h-screen text-gray-100">
       <Header />
+      <Search setCars={setCars} /> {/* Dodano za pretragu automobila */}
       <div className="pt-6 pb-4">
         {/* Breadcrumb */}
         {/* <nav aria-label="Breadcrumb">
@@ -100,25 +118,8 @@ const Car = () => {
               ${car.price_per_day} / day
             </p>
 
-            {/* Reviews
-            <div className="mt-6">
-              <div className="flex items-center">
-                <div className="flex items-center">
-                  {[0, 1, 2, 3, 4].map((rating) => (
-                    <StarIcon
-                      key={rating}
-                      aria-hidden="true"
-                      className={classNames(
-                        reviews.average > rating
-                          ? "text-gray-100"
-                          : "text-gray-600",
-                        "h-5 w-5 flex-shrink-0"
-                      )}
-                    />
-                  ))}
-                </div>
-              </div>
-            </div> */}
+            {/* Reviews */}
+            {/* ... existing review code ... */}
 
             {/* Product Availability */}
             <div className="mt-4">
@@ -179,8 +180,9 @@ const Car = () => {
               <p className="mt-4 text-base text-gray-300">{car.description}</p>
             </div>
 
+            {/* Reserve button */}
             <button
-              onClick={() => navigate(`/car-reserve/${car.id}`)}
+              onClick={handleReserve} // Change to call handleReserve
               className="w-full px-4 py-2 mt-8 text-lg font-semibold text-white bg-indigo-600 rounded-md hover:bg-indigo-700"
             >
               Reserve
@@ -188,6 +190,9 @@ const Car = () => {
           </div>
         </div>
       </div>
+
+      {/* Popup for reservation message */}
+      <Popup message={popupMessage} show={showPopup} onClose={() => setShowPopup(false)} />
     </div>
   );
 };
