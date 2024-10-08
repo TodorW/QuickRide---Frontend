@@ -5,8 +5,8 @@ import { CarService } from "../../api/api";
 import { useNavigate, useParams } from "react-router-dom";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import Popup from "../components/Popup"; // Importujte Popup komponentu
-import Search from "../components/Search"; // Importujte Search komponentu
+import Popup from "../PopUp"; // Importujte Popup komponentu
+import Search from "../single-car/Search"; // Importujte Search komponentu
 
 const Car = () => {
   const [car, setCar] = useState([]);
@@ -73,7 +73,7 @@ const Car = () => {
           {/* Image on the left */}
           <div className="aspect-h-4 aspect-w-3 overflow-hidden rounded-lg">
             <img
-              src={`http://tim1.cortexakademija.com/storage/cars-images/${car.image}`}
+              src={`http://tim1.cortexakademija.com/cars-images/${car.image}`}
               alt={`${car.make} ${car.model}`}
               className="w-full h-auto object-contain"
             />
@@ -190,9 +190,12 @@ const Car = () => {
           </div>
         </div>
       </div>
-
       {/* Popup for reservation message */}
-      <Popup message={popupMessage} show={showPopup} onClose={() => setShowPopup(false)} />
+      <Popup
+        message={popupMessage}
+        show={showPopup}
+        onClose={() => setShowPopup(false)}
+      />
     </div>
   );
 };
