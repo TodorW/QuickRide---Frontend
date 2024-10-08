@@ -9,7 +9,7 @@ import "react-datepicker/dist/react-datepicker.css";
 const Car = () => {
   const [car, setCar] = useState([]);
   const [startDate, setStartDate] = useState(null); // Početni datum rezervacije
-  const [endDate, setEndDate] = useState(null);     // Krajnji datum rezervacije
+  const [endDate, setEndDate] = useState(null); // Krajnji datum rezervacije
   const { id } = useParams();
   const navigate = useNavigate();
 
@@ -55,7 +55,7 @@ const Car = () => {
           {/* Image on the left */}
           <div className="aspect-h-4 aspect-w-3 overflow-hidden rounded-lg">
             <img
-              src={`http://127.0.0.1:8000/storage/cars-images/${car.image}`}
+              src={`http://tim1.cortexakademija.com/storage/cars-images/${car.image}`}
               alt={`${car.make} ${car.model}`}
               className="w-full h-auto object-contain"
             />

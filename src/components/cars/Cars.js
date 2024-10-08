@@ -36,7 +36,7 @@ const Cars = () => {
             >
               <div className="relative aspect-w-2 aspect-h-3">
                 <img
-                  src={`http://127.0.0.1:8000/storage/cars-images/${car.image}`}
+                  src={`http://tim1.cortexakademija.com/storage/cars-images/${car.image}`}
                   alt={`${car.make} ${car.model}`}
                   className="object-cover w-full h-full transition-transform duration-300 group-hover:scale-110"
                   style={{
