@@ -54,7 +54,7 @@ const Cars = () => {
                   {car.year} - {car.transmission} - {car.fuel_type}
                 </p>
                 <p className="mt-1 text-sm font-medium text-gray-700 dark:text-gray-300">
-                  Cena po danu: ${car.price_per_day}
+                  Price per day: ${car.price_per_day}
                 </p>
                 <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
                   {car.description}
