@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
-import { StarIcon } from "@heroicons/react/20/solid";
+//import { StarIcon } from "@heroicons/react/20/solid";
+import { ArrowLeftIcon } from "@heroicons/react/24/solid";
 import Header from "../layout/Header";
 import { CarService } from "../../api/api";
 import { useNavigate, useParams } from "react-router-dom";
@@ -14,6 +15,10 @@ const Car = () => {
   const [reservedDates, setReservedDates] = useState([]);
   const { id } = useParams();
   const navigate = useNavigate();
+
+  const handleGoBack = () => {
+    navigate(-1);
+  };
 
   useEffect(() => {
     const fetchCar = async () => {
@@ -41,6 +46,12 @@ const Car = () => {
   return (
     <div className="bg-gray-900 min-h-screen text-gray-100">
       <Header />
+      <div className="pt-4 pl-4">
+        <button onClick={handleGoBack} className="flex items-center text-white">
+          <ArrowLeftIcon className="h-6 w-6" />
+          <span className="ml-2">Go Back</span>
+        </button>
+      </div>
       <div className="pt-6 pb-4">
         {/* Main content: image left, details right */}
         <div className="mx-auto mt-6 max-w-7xl lg:grid lg:grid-cols-2 lg:gap-x-8">

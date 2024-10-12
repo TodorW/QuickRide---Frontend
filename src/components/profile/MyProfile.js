@@ -1,7 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthService, UserService } from "../../api/api";
-import { FaEdit, FaSignOutAlt, FaHome } from "react-icons/fa";
+import {
+  HomeIcon,
+  PencilIcon,
+  ArrowLeftOnRectangleIcon,
+  ArrowLeftIcon,
+} from "@heroicons/react/24/solid";
 
 const MyProfile = () => {
   const navigate = useNavigate();
@@ -47,6 +52,10 @@ const MyProfile = () => {
     navigate("/");
   };
 
+  const handleGoBack = () => {
+    navigate(-1);
+  };
+
   if (error) {
     return <div>Error: {error}</div>;
   }
@@ -54,6 +63,14 @@ const MyProfile = () => {
   return (
     <div className="flex min-h-screen flex-col justify-center bg-gray-900 px-6 py-12 lg:px-8 text-white">
       <div className="sm:mx-auto sm:w-full sm:max-w-lg bg-gray-800 p-6 rounded-md shadow-md">
+        <button
+          onClick={handleGoBack}
+          className="absolute top-4 left-4 flex items-center text-white"
+        >
+          <ArrowLeftIcon className="h-6 w-6" />
+          <span className="ml-2">Go Back</span>
+        </button>
+
         <h2 className="text-center text-2xl font-bold mb-8">My Profile</h2>
 
         {/* Profile Picture */}
@@ -99,21 +116,21 @@ const MyProfile = () => {
             onClick={handleEditProfile}
             className="bg-indigo-600 hover:bg-indigo-700 text-white py-2 px-4 rounded-md flex items-center"
           >
-            <FaEdit className="mr-2" />
+            <PencilIcon className="h-6 w-6 mr-2" />
             Edit Profile
           </button>
           <button
             onClick={handleLogout}
             className="bg-red-600 hover:bg-red-700 text-white py-2 px-4 rounded-md flex items-center"
           >
-            <FaSignOutAlt className="mr-2" />
+            <ArrowLeftOnRectangleIcon className="h-6 w-6 mr-2" />
             Logout
           </button>
           <button
             onClick={handleGoHome}
             className="bg-green-600 hover:bg-green-700 text-white py-2 px-4 rounded-md flex items-center"
           >
-            <FaHome className="mr-2" />
+            <HomeIcon className="h-6 w-6 mr-2" />
             Back to Home
           </button>
         </div>

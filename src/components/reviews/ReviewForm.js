@@ -1,6 +1,9 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { ArrowLeftIcon } from "@heroicons/react/24/solid";
 
 const ReviewForm = () => {
+  const navigate = useNavigate();
   const [rating, setRating] = useState(0);
   const [message, setMessage] = useState("");
 
@@ -20,8 +23,19 @@ const ReviewForm = () => {
     setMessage("");
   };
 
+  const handleGoBack = () => {
+    navigate(-1);
+  };
+
   return (
     <div className="min-h-screen bg-gray-900 py-6 flex flex-col justify-center sm:py-12">
+      <button
+        onClick={handleGoBack}
+        className="absolute top-4 left-4 flex items-center text-white"
+      >
+        <ArrowLeftIcon className="h-6 w-6" />
+        <span className="ml-2">Go Back</span>
+      </button>
       <div className="py-3 sm:max-w-xl sm:mx-auto">
         <div className="bg-gray-800 min-w-1xl flex flex-col rounded-xl shadow-lg">
           <div className="px-12 py-5">

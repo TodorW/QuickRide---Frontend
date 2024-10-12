@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, Link } from "react-router-dom"; // Import useNavigate for redirection
-import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/solid";
 import PopUpLogin from "../PopUpLogin";
 import { AuthService } from "../../api/api";
 
@@ -111,9 +111,9 @@ const Login = () => {
                 onClick={() => setPasswordVisible(!passwordVisible)}
               >
                 {passwordVisible ? (
-                  <FaEyeSlash className="text-gray-400" />
+                   <EyeSlashIcon className="h-5 w-5 text-gray-400" />
                 ) : (
-                  <FaEye className="text-gray-400" />
+                  <EyeIcon className="h-5 w-5 text-gray-400" />
                 )}
               </div>
             </div>

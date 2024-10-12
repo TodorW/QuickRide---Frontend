@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { UserService } from "../../api/api";
+import { ArrowLeftIcon } from "@heroicons/react/24/solid";
 
 const EditProfile = () => {
   const navigate = useNavigate();
@@ -51,6 +52,10 @@ const EditProfile = () => {
     }
   };
 
+  const handleGoBack = () => {
+    navigate(-1);
+  };
+
   if (error) {
     return <div>Error: {error}</div>;
   }
@@ -58,6 +63,14 @@ const EditProfile = () => {
   return (
     <div className="flex min-h-screen flex-col justify-center bg-gray-900 px-6 py-12 lg:px-8 text-white">
       <div className="sm:mx-auto sm:w-full sm:max-w-lg bg-gray-800 p-6 rounded-md shadow-md">
+        <button
+          onClick={handleGoBack}
+          className="absolute top-4 left-4 flex items-center text-white"
+        >
+          <ArrowLeftIcon className="h-6 w-6" />
+          <span className="ml-2">Go Back</span>
+        </button>
+
         <h2 className="text-center text-2xl font-bold mb-8">Edit Profile</h2>
         <form onSubmit={handleSubmit}>
           {/* Name */}
@@ -74,7 +87,9 @@ const EditProfile = () => {
 
           {/* Email */}
           <div className="mb-4">
-            <label className="block text-sm font-medium text-white">Email</label>
+            <label className="block text-sm font-medium text-white">
+              Email
+            </label>
             <input
               type="email"
               name="email"
@@ -86,7 +101,9 @@ const EditProfile = () => {
 
           {/* Phone */}
           <div className="mb-4">
-            <label className="block text-sm font-medium text-white">Phone</label>
+            <label className="block text-sm font-medium text-white">
+              Phone
+            </label>
             <input
               type="text"
               name="phone"
@@ -98,7 +115,9 @@ const EditProfile = () => {
 
           {/* Address */}
           <div className="mb-4">
-            <label className="block text-sm font-medium text-white">Address</label>
+            <label className="block text-sm font-medium text-white">
+              Address
+            </label>
             <input
               type="text"
               name="address"
@@ -121,7 +140,9 @@ const EditProfile = () => {
 
           {/* Gender */}
           <div className="mb-4">
-            <label className="block text-sm font-medium text-white">Gender</label>
+            <label className="block text-sm font-medium text-white">
+              Gender
+            </label>
             <select
               name="gender"
               value={user.gender}
@@ -137,7 +158,9 @@ const EditProfile = () => {
 
           {/* Birth Date */}
           <div className="mb-4">
-            <label className="block text-sm font-medium text-white">Birth Date</label>
+            <label className="block text-sm font-medium text-white">
+              Birth Date
+            </label>
             <input
               type="date"
               name="birthDate"
@@ -149,7 +172,9 @@ const EditProfile = () => {
 
           {/* Privacy Settings */}
           <div className="mb-4">
-            <label className="block text-sm font-medium text-white">Privacy Settings</label>
+            <label className="block text-sm font-medium text-white">
+              Privacy Settings
+            </label>
             <select
               name="privacy"
               value={user.privacy}
