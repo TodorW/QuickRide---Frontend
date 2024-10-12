@@ -1,33 +1,36 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
+// import { useSelector, useDispatch } from "react-redux"; // Uklonjeno Redux
 import { AuthService, UserService } from "../../api/api";
 import { FaEdit, FaSignOutAlt, FaHome } from "react-icons/fa";
-import { setSelectedUser } from "../../redux/profileSlice";
+// import { setSelectedUser } from "../../redux/profileSlice"; // Uklonjeno Redux
 
 const MyProfile = () => {
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch(); // Uklonjeno Redux
   const navigate = useNavigate();
-  const profile = useSelector((state) => state.profile);
+  // const profile = useSelector((state) => state.profile); // Uklonjeno Redux
 
-  const [user, setUser] = useState([]);
+  const [user, setUser] = useState({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [bio, setBio] = useState(""); // Lokalni state za bio
 
   useEffect(() => {
     const fetchProfile = async () => {
       try {
         const response = await UserService.GetProfile();
         setUser(response.data.user);
-        dispatch(setSelectedUser(response.data.user));
+        setBio(response.data.user.bio); // Postavljanje biografije
+        // dispatch(setSelectedUser(response.data.user)); // Uklonjeno Redux
       } catch (error) {
         console.log("Error fetching user:", error);
         setError("Error fetching user profile");
       }
+      setLoading(false);
     };
 
     fetchProfile();
-  });
+  }, []); // Prazan niz znači da se useEffect pokreće samo jednom, pri mountanju komponente
 
   const handleEditProfile = () => {
     navigate("/edit-profile");
@@ -49,6 +52,10 @@ const MyProfile = () => {
     navigate("/"); // Navigate to home page
   };
 
+  if (loading) {
+    return <div>Loading...</div>; // Prikazuje se dok se podaci učitavaju
+  }
+
   if (error) {
     return <div>Error: {error}</div>;
   }
@@ -61,7 +68,7 @@ const MyProfile = () => {
         {/* Profile Picture */}
         <div className="flex justify-center mb-6">
           <img
-            src={user.profileImage}
+            src={user.profileImage || "https://cdn-icons-png.flaticon.com/512/847/847969.png"} // Dodana fallback slika
             alt="Profile"
             className="h-24 w-24 rounded-full object-cover border-2 border-gray-600"
           />
@@ -82,7 +89,7 @@ const MyProfile = () => {
         {/* Bio */}
         <div className="mb-4">
           <h3 className="text-lg font-semibold">Bio</h3>
-          <p>{profile.bio}</p>
+          <p>{bio}</p>
         </div>
         {/* Additional Information */}
         <div className="mb-4">
