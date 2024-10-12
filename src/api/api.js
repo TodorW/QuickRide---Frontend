@@ -18,7 +18,6 @@ client.interceptors.response.use(
   },
   async function (error) {
     if (error.response.status === HTTP_UNAUTHORIZED) {
-      console.log(`Received ${HTTP_UNAUTHORIZED} status code`);
       LocalStorage.remove("BearerToken");
 
       window.location.href = "/login";
@@ -30,8 +29,6 @@ client.interceptors.response.use(
 client.interceptors.request.use(
   async (config) => {
     const token = LocalStorage.get("BearerToken");
-
-    // console.log("Token is", token);
 
     if (!config.headers.Authorization) {
       config.headers.Authorization = `Bearer ${token}`;
@@ -56,11 +53,7 @@ export const AuthService = {
           Authorization: `Bearer ${token}`,
         },
       });
-      console.log(response);
       if (response.status === HTTP_OK) {
-        // console.log(
-        //   `Setting local token ${response.data.success.token}`
-        // );
         LocalStorage.set("BearerToken", response.data.token);
         return true;
       }

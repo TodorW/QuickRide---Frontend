@@ -45,15 +45,9 @@ const Login = () => {
 
     try {
       const response = await AuthService.login(loginUserData);
-
-      if (response.status === 200) {
-        navigate("/home");
-      } else {
-        setErrorMessage("Invalid login credentials");
-        setPopupOpen(true);
-      }
+      navigate("/home");
     } catch (error) {
-      setErrorMessage(error.response.data.message);
+      setErrorMessage(error.response.data.message || "An error occurred");
       setPopupOpen(true);
     }
   };
@@ -72,7 +66,7 @@ const Login = () => {
       </div>
 
       <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-        <form className="space-y-6">
+        <form className="space-y-6" onSubmit={handleSubmit}>
           <div>
             <label
               htmlFor="email"
@@ -128,8 +122,7 @@ const Login = () => {
           {/* Submit dugme */}
           <div>
             <button
-              type="button"
-              onClick={handleSubmit}
+              type="submit"
               className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
             >
               Sign in
