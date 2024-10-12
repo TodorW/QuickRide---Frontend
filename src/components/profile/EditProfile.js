@@ -5,7 +5,7 @@ import { ArrowLeftIcon } from "@heroicons/react/24/solid";
 
 const EditProfile = () => {
   const navigate = useNavigate();
-  
+
   // Initial state for form inputs
   const [user, setUser] = useState({
     name: "",
@@ -31,7 +31,10 @@ const EditProfile = () => {
         const { name, email } = response.data;
         setUser((prevUser) => ({ ...prevUser, name, email }));
       } catch (error) {
-        console.error("Error fetching user profile:", error.response?.data || error.message);
+        console.error(
+          "Error fetching user profile:",
+          error.response?.data || error.message
+        );
         setError("Error fetching user profile");
       }
     };
@@ -56,8 +59,8 @@ const EditProfile = () => {
 
     try {
       const token = "1|jz6Ppzv0RF2Rku9R7KQVzIhQ8M5letNhGKSsdxAP296d2314"; // Your token
-      console.log('Sending update request with data:', user);
-      
+      console.log("Sending update request with data:", user);
+
       const response = await axios.put(
         "http://127.0.0.1:8000/api/user",
         {
@@ -73,12 +76,15 @@ const EditProfile = () => {
           },
         }
       );
-      
+
       setSuccess("Profile updated successfully");
       console.log("Profile updated:", response.data);
       navigate("/my-profile"); // Redirect after successful update
     } catch (error) {
-      console.error("Error updating profile:", error.response?.data || error.message);
+      console.error(
+        "Error updating profile:",
+        error.response?.data || error.message
+      );
       setError("Error updating profile");
     }
   };
@@ -92,7 +98,7 @@ const EditProfile = () => {
       <div className="sm:mx-auto sm:w-full sm:max-w-lg bg-gray-800 p-6 rounded-md shadow-md">
         <button
           onClick={handleGoBack}
-          className="absolute top-4 left-4 flex items-center text-white"
+          className="absolute top-4 left-4 flex items-center text-gray-900 dark:text-white bg-indigo-600 px-4 py-2 rounded-md shadow-md hover:bg-indigo-700 transition-colors duration-300"
         >
           <ArrowLeftIcon className="h-6 w-6" />
           <span className="ml-2">Go Back</span>
@@ -118,7 +124,9 @@ const EditProfile = () => {
 
           {/* Email */}
           <div className="mb-4">
-            <label className="block text-sm font-medium text-white">Email</label>
+            <label className="block text-sm font-medium text-white">
+              Email
+            </label>
             <input
               type="email"
               name="email"
@@ -130,7 +138,9 @@ const EditProfile = () => {
 
           {/* Password */}
           <div className="mb-4">
-            <label className="block text-sm font-medium text-white">Password</label>
+            <label className="block text-sm font-medium text-white">
+              Password
+            </label>
             <input
               type="password"
               name="password"
