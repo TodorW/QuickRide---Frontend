@@ -13,6 +13,7 @@ import Home from "./components/home/Home";
 import ReviewForm from "./components/reviews/ReviewForm";
 import Car from "./components/single-car/Car";
 import ReserveCar from "./components/reserve-car/ReserveCar";
+import Dashboard from "./components/dashboard/Dashboard";
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
         <Route path="/home" element={<Home />} />
         <Route path="/car/:id" element={<Car />} />
         <Route path="/car-reserve/:id" element={<ReserveCar />} />
+        <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/add-review" element={<ReviewForm />} />
       </Routes>
     </Router>

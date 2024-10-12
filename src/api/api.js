@@ -101,4 +101,7 @@ export const ReservationService = {
   ListCarsReservedDates(carId) {
     return client.get(`reservations/${carId}/reserved-dates`);
   },
+  ListUsersReservations(userId) {
+    return client.get(`reservations/users/${userId}`);
+  },
 };

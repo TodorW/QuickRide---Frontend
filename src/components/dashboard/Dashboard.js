@@ -1,136 +1,164 @@
-import React, { useEffect, useState } from 'react';
+import { useNavigate } from "react-router-dom";
+import { ReservationService, UserService, CarService } from "../../api/api";
+import { useState, useEffect } from "react";
+import Header from "../layout/Header";
 
-const Dashboard = () => {
+const ReservationsDashboard = () => {
   const [reservations, setReservations] = useState([]);
-  const [history, setHistory] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [user, setUser] = useState([]);
+  const [cars, setCars] = useState({});
+
+  const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchProfile = async () => {
       try {
-        const responseReservations = await fetch('https://api.postman.com/reservations'); // Zamjenit sa stvarnim URL-om
-        const responseHistory = await fetch('https://api.postman.com/rental-history'); // Zamjenit sa stvarnim URL-om
-
-        if (!responseReservations.ok || !responseHistory.ok) {
-          throw new Error('Failed to fetch data');
-        }
-
-        const reservationsData = await responseReservations.json();
-        const historyData = await responseHistory.json();
-
-        setReservations(reservationsData);
-        setHistory(historyData);
+        const response = await UserService.GetProfile();
+        setUser(response.data.user);
       } catch (error) {
-        setError(error.message);
-      } finally {
-        setLoading(false);
+        console.log("Error fetching user:", error);
       }
     };
 
-    fetchData();
+    fetchProfile();
   }, []);
 
-  const handleCancelReservation = async (reservationId) => {
-    try {
-      const response = await fetch(`https://api.postman.com/reservations/${reservationId}`, {
-        method: 'DELETE',
-      });
+  useEffect(() => {
+    const fetchReservations = async () => {
+      try {
+        const response = await ReservationService.ListUsersReservations(
+          user.id
+        );
+        setReservations(response.data.reservations);
 
-      if (!response.ok) {
-        throw new Error('Failed to cancel reservation');
+        const carPromises = response.data.reservations.map((reservation) =>
+          CarService.GetCar(reservation.car_id).then((carResponse) => ({
+            id: reservation.car_id,
+            ...carResponse.data.car,
+          }))
+        );
+
+        const fetchedCars = await Promise.all(carPromises);
+        const carsObject = fetchedCars.reduce((acc, car) => {
+          acc[car.id] = car;
+          return acc;
+        }, {});
+
+        setCars(carsObject);
+      } catch (error) {
+        console.log("Error fetching reservations:", error);
       }
+    };
 
-      setReservations(prevReservations =>
-        prevReservations.filter(reservation => reservation.id !== reservationId)
-      );
-    } catch (error) {
-      console.error(error);
+    if (user.id) {
+      fetchReservations();
     }
-  };
-
-  if (loading) {
-    return <div>Loading...</div>;
-  }
-
-  if (error) {
-    return <div>Error: {error}</div>;
-  }
+  }, [user.id]);
 
   return (
-    <div className="bg-gray-900 p-6 rounded-md shadow-md mt-8">
-      <h2 className="text-center text-2xl font-bold mb-8">Dashboard</h2>
+    <>
+      <Header />
+      <div className="min-h-screen py-12 transition-colors duration-300 bg-gray-100 dark:bg-gray-900">
+        <div className="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
+          <h1 className="mb-8 text-3xl font-extrabold text-gray-900 dark:text-white animate-fade-in">
+            Reservations Dashboard
+          </h1>
 
-      {/* Trenutne Rezervacije */}
-      <div className="mb-8">
-        <h3 className="text-lg font-semibold mb-4">Trenutne Rezervacije</h3>
-        <table className="w-full table-auto bg-gray-800 rounded-md text-white">
-          <thead>
-            <tr className="text-left">
-              <th className="px-4 py-2">Rezervacija ID</th>
-              <th className="px-4 py-2">Vozilo</th>
-              <th className="px-4 py-2">Datum</th>
-              <th className="px-4 py-2">Akcije</th>
-            </tr>
-          </thead>
-          <tbody>
-            {reservations.length > 0 ? (
-              reservations.map(reservation => (
-                <tr key={reservation.id} className="border-t border-gray-600">
-                  <td className="px-4 py-2">{reservation.id}</td>
-                  <td className="px-4 py-2">{reservation.vehicle}</td>
-                  <td className="px-4 py-2">{reservation.date}</td>
-                  <td className="px-4 py-2">
+          <div className="grid grid-cols-1 gap-y-10 sm:grid-cols-2 gap-x-6 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-8">
+            {reservations.map((reservation, index) => (
+              <div
+                key={reservation.id}
+                className="overflow-hidden transition duration-300 transform bg-white rounded-lg shadow-md group dark:bg-gray-800 hover:scale-105 hover:shadow-xl animate-fade-in-up"
+                style={{ animationDelay: `${index * 100}ms` }}
+              >
+                <div className="relative aspect-w-2 aspect-h-3">
+                  {cars[reservation.car_id] && (
+                    <img
+                      src={`http://tim1.cortexakademija.com/storage/cars-images/${
+                        cars[reservation.car_id].image
+                      }`}
+                      alt={`${cars[reservation.car_id].make} ${
+                        cars[reservation.car_id].model
+                      }`}
+                      className="object-cover w-full h-full transition-transform duration-300 group-hover:scale-110"
+                      style={{
+                        width: "300px",
+                        height: "200px",
+                        objectFit: "cover",
+                      }}
+                    />
+                  )}
+                </div>
+                <div className="px-4 py-3 mt-2">
+                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400">
+                    {cars[reservation.car_id]
+                      ? `${cars[reservation.car_id].make} ${
+                          cars[reservation.car_id].model
+                        }`
+                      : "Loading..."}
+                  </h3>
+                  <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
+                    Reservation from: {reservation.start_date} to{" "}
+                    {reservation.end_date}
+                  </p>
+                  <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
+                    Status: {reservation.status}
+                  </p>
+                  <div className="grid grid-cols-2 gap-2 mt-4">
                     <button
-                      onClick={() => handleCancelReservation(reservation.id)}
-                      className="bg-red-600 hover:bg-red-700 text-white py-1 px-3 rounded-md"
+                      onClick={() =>
+                        navigate(`/reservation/edit/${reservation.id}`)
+                      }
+                      className="px-4 py-2 text-sm font-semibold text-white bg-blue-600 rounded-md hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600"
                     >
-                      Otkazi
+                      Edit
                     </button>
-                  </td>
-                </tr>
-              ))
-            ) : (
-              <tr>
-                <td colSpan="4" className="px-4 py-2 text-center">Nema trenutnih rezervacija</td>
-              </tr>
-            )}
-          </tbody>
-        </table>
-      </div>
+                    <button
+                      onClick={() =>
+                        navigate(`/reservation/cancel/${reservation.id}`)
+                      }
+                      className="px-4 py-2 text-sm font-semibold text-white bg-red-600 rounded-md hover:bg-red-700 dark:bg-red-500 dark:hover:bg-red-600"
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      onClick={() =>
+                        navigate(`/reservation/status/${reservation.id}`)
+                      }
+                      className="px-4 py-2 text-sm font-semibold text-white bg-gray-600 rounded-md hover:bg-gray-700 dark:bg-gray-500 dark:hover:bg-gray-600"
+                    >
+                      Check Status
+                    </button>
+                    <button
+                      onClick={() =>
+                        navigate(`/reservation/rate/${reservation.id}`)
+                      }
+                      disabled={reservation.status !== "returned"}
+                      className={`px-4 py-2 text-sm font-semibold text-white ${
+                        reservation.status === "returned"
+                          ? "bg-yellow-600 hover:bg-yellow-700 dark:bg-yellow-500 dark:hover:bg-yellow-600"
+                          : "bg-yellow-300 cursor-not-allowed"
+                      } rounded-md`}
+                    >
+                      Rate
+                    </button>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
 
-      {/* Istorija Iznajmljivanja */}
-      <div>
-        <h3 className="text-lg font-semibold mb-4">Istorija Iznajmljivanja</h3>
-        <table className="w-full table-auto bg-gray-800 rounded-md text-white">
-          <thead>
-            <tr className="text-left">
-              <th className="px-4 py-2">Rezervacija ID</th>
-              <th className="px-4 py-2">Vozilo</th>
-              <th className="px-4 py-2">Datum</th>
-              <th className="px-4 py-2">Status</th>
-            </tr>
-          </thead>
-          <tbody>
-            {history.length > 0 ? (
-              history.map(item => (
-                <tr key={item.id} className="border-t border-gray-600">
-                  <td className="px-4 py-2">{item.id}</td>
-                  <td className="px-4 py-2">{item.vehicle}</td>
-                  <td className="px-4 py-2">{item.date}</td>
-                  <td className="px-4 py-2">{item.status}</td>
-                </tr>
-              ))
-            ) : (
-              <tr>
-                <td colSpan="4" className="px-4 py-2 text-center">Nema istorije iznajmljivanja</td>
-              </tr>
-            )}
-          </tbody>
-        </table>
+          {reservations.length === 0 && (
+            <div className="text-center animate-fade-in">
+              <p className="text-xl text-gray-600 dark:text-gray-400">
+                No reservations available.
+              </p>
+            </div>
+          )}
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 
-export default Dashboard;
+export default ReservationsDashboard;
