@@ -1,4 +1,4 @@
-import { UserService } from "../../api/api";
+import { AuthService, UserService } from "../../api/api";
 import { useState, useEffect } from "react";
 import {
   Dialog,
@@ -26,54 +26,18 @@ import {
   PhoneIcon,
   PlayCircleIcon,
 } from "@heroicons/react/20/solid";
-
-const products = [
-  {
-    name: "Analytics",
-    description: "Get a better understanding of your traffic",
-    href: "#",
-    icon: ChartPieIcon,
-  },
-  {
-    name: "Engagement",
-    description: "Speak directly to your customers",
-    href: "#",
-    icon: CursorArrowRaysIcon,
-  },
-  {
-    name: "Security",
-    description: "Your customers’ data will be safe and secure",
-    href: "#",
-    icon: FingerPrintIcon,
-  },
-  {
-    name: "Integrations",
-    description: "Connect with third-party tools",
-    href: "#",
-    icon: SquaresPlusIcon,
-  },
-  {
-    name: "Automations",
-    description: "Build strategic funnels that will convert",
-    href: "#",
-    icon: ArrowPathIcon,
-  },
-];
-
-const callsToAction = [
-  { name: "Watch demo", href: "#", icon: PlayCircleIcon },
-  { name: "Contact sales", href: "#", icon: PhoneIcon },
-];
+import { useNavigate } from "react-router-dom";
 
 const Header = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
 
+  const navigate = useNavigate();
+
   useEffect(() => {
     const fetchProfile = async () => {
       try {
         const response = await UserService.GetProfile();
-        // console.log(response.data);
         setIsAdmin(response.data.user.is_admin);
       } catch (error) {
         console.log("Error fetching user:", error);
@@ -82,6 +46,18 @@ const Header = () => {
 
     fetchProfile();
   }, []);
+
+  const handleLogout = async () => {
+    try {
+      const success = await AuthService.logout();
+      if (success) {
+        console.log("Logout successful");
+        navigate("/login");
+      }
+    } catch (error) {
+      console.error("Error logging out", error);
+    }
+  };
 
   return (
     <header className="bg-gray-900 text-white">
@@ -110,106 +86,56 @@ const Header = () => {
           </button>
         </div>
         <PopoverGroup className="hidden lg:flex lg:gap-x-12">
-          <Popover className="relative">
-            <PopoverButton className="flex items-center gap-x-1 text-sm font-semibold leading-6 text-gray-200">
-              Product
-              <ChevronDownIcon
-                aria-hidden="true"
-                className="h-5 w-5 flex-none text-gray-400"
-              />
-            </PopoverButton>
-
-            <PopoverPanel
-              transition
-              className="absolute -left-8 top-full z-10 mt-3 w-screen max-w-md overflow-hidden rounded-3xl bg-gray-800 shadow-lg ring-1 ring-gray-900/5 transition data-[closed]:translate-y-1 data-[closed]:opacity-0 data-[enter]:duration-200 data-[leave]:duration-150 data-[enter]:ease-out data-[leave]:ease-in"
-            >
-              <div className="p-4">
-                {products.map((item) => (
-                  <div
-                    key={item.name}
-                    className="group relative flex items-center gap-x-6 rounded-lg p-4 text-sm leading-6 hover:bg-gray-700"
-                  >
-                    <div className="flex h-11 w-11 flex-none items-center justify-center rounded-lg bg-gray-700 group-hover:bg-gray-600">
-                      <item.icon
-                        aria-hidden="true"
-                        className="h-6 w-6 text-gray-400 group-hover:text-indigo-400"
-                      />
-                    </div>
-                    <div className="flex-auto">
-                      <a
-                        href={item.href}
-                        className="block font-semibold text-gray-200"
-                      >
-                        {item.name}
-                        <span className="absolute inset-0" />
-                      </a>
-                      <p className="mt-1 text-gray-400">{item.description}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-              <div className="grid grid-cols-2 divide-x divide-gray-900/5 bg-gray-700">
-                {callsToAction.map((item) => (
-                  <a
-                    key={item.name}
-                    href={item.href}
-                    className="flex items-center justify-center gap-x-2.5 p-3 text-sm font-semibold leading-6 text-gray-200 hover:bg-gray-600"
-                  >
-                    <item.icon
-                      aria-hidden="true"
-                      className="h-5 w-5 flex-none text-gray-400"
-                    />
-                    {item.name}
-                  </a>
-                ))}
-              </div>
-            </PopoverPanel>
-          </Popover>
-
-          <a href="#" className="text-sm font-semibold leading-6 text-gray-200">
-            Features
+          <a
+            href="/home"
+            className="text-sm font-semibold leading-6 text-gray-200"
+          >
+            Home
           </a>
-          <a href="#" className="text-sm font-semibold leading-6 text-gray-200">
-            Marketplace
-          </a>
-          <a href="#" className="text-sm font-semibold leading-6 text-gray-200">
-            Company
+          <a
+            href="/dashboard"
+            className="text-sm font-semibold leading-6 text-gray-200"
+          >
+            Dashboard
           </a>
           {isAdmin ? (
-            <Popover className="relative">
-              <Popover.Button className="flex items-center gap-x-1 text-sm font-semibold leading-6 text-gray-200">
-                Admin
-                <ChevronDownIcon
-                  aria-hidden="true"
-                  className="h-5 w-5 flex-none text-gray-400"
-                />
-              </Popover.Button>
-              <Popover.Panel
-                transition
-                className="absolute -left-8 top-full z-10 mt-3 w-screen max-w-md overflow-hidden rounded-3xl bg-gray-800 shadow-lg ring-1 ring-gray-900/5 transition data-[closed]:translate-y-1 data-[closed]:opacity-0 data-[enter]:duration-200 data-[leave]:duration-150 data-[enter]:ease-out data-[leave]:ease-in"
-              >
-                <div className="p-4">
-                  <a
-                    href="http://127.0.0.1:8000/login"
-                    className="block font-semibold text-gray-200 hover:bg-gray-700 p-2 rounded"
-                  >
-                    Admin Dashboard
-                  </a>
-                </div>
-              </Popover.Panel>
-            </Popover>
+            <a
+              href="http://tim1.cortexakademija.com/admin"
+              className="text-sm font-semibold leading-6 text-gray-200"
+            >
+              Admin Panel
+            </a>
           ) : (
             <div></div>
           )}
         </PopoverGroup>
         <div className="hidden lg:flex lg:flex-1 lg:justify-end">
-          <a
-            href="/my-profile"
-            className="text-sm font-semibold leading-6 text-gray-200"
-          >
-            <UserIcon className="h-6 w-6 inline-block" aria-hidden="true" />
-            Profile <span aria-hidden="true">&rarr;</span>
-          </a>
+          <Popover className="relative">
+            <PopoverButton className="flex items-center gap-x-1 text-sm font-semibold leading-6 text-gray-200">
+              <UserIcon className="h-6 w-6 inline-block" aria-hidden="true" />
+              Profile
+              <ChevronDownIcon className="h-5 w-5 flex-none text-gray-400" />
+            </PopoverButton>
+            <PopoverPanel
+              transition
+              className="absolute -right-8 top-full z-10 mt-3 w-screen max-w-xs overflow-hidden rounded-3xl bg-gray-800 shadow-lg ring-1 ring-gray-900/5 transition"
+            >
+              <div className="p-4">
+                <a
+                  href="/my-profile"
+                  className="block font-semibold text-gray-200 hover:bg-gray-700 p-2 rounded"
+                >
+                  View Profile
+                </a>
+                <button
+                  onClick={handleLogout}
+                  className="block font-semibold text-gray-200 hover:bg-gray-700 p-2 rounded w-full text-left"
+                >
+                  Logout
+                </button>
+              </div>
+            </PopoverPanel>
+          </Popover>
         </div>
       </nav>
       <Dialog
@@ -248,17 +174,7 @@ const Header = () => {
                       className="h-5 w-5 flex-none text-gray-400"
                     />
                   </DisclosureButton>
-                  <DisclosurePanel className="mt-2 space-y-2">
-                    {products.map((item) => (
-                      <a
-                        key={item.name}
-                        href={item.href}
-                        className="block rounded-lg py-2 pl-6 pr-3 text-sm font-semibold leading-7 text-gray-200 hover:bg-gray-700"
-                      >
-                        {item.name}
-                      </a>
-                    ))}
-                  </DisclosurePanel>
+                  <DisclosurePanel className="mt-2 space-y-2"></DisclosurePanel>
                 </Disclosure>
                 <a
                   href="#"

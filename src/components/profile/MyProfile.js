@@ -1,27 +1,22 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-// import { useSelector, useDispatch } from "react-redux"; // Uklonjeno Redux
 import { AuthService, UserService } from "../../api/api";
 import { FaEdit, FaSignOutAlt, FaHome } from "react-icons/fa";
-// import { setSelectedUser } from "../../redux/profileSlice"; // Uklonjeno Redux
 
 const MyProfile = () => {
-  // const dispatch = useDispatch(); // Uklonjeno Redux
   const navigate = useNavigate();
-  // const profile = useSelector((state) => state.profile); // Uklonjeno Redux
 
   const [user, setUser] = useState({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [bio, setBio] = useState(""); // Lokalni state za bio
+  const [bio, setBio] = useState("");
 
   useEffect(() => {
     const fetchProfile = async () => {
       try {
         const response = await UserService.GetProfile();
         setUser(response.data.user);
-        setBio(response.data.user.bio); // Postavljanje biografije
-        // dispatch(setSelectedUser(response.data.user)); // Uklonjeno Redux
+        setBio(response.data.user.bio);
       } catch (error) {
         console.log("Error fetching user:", error);
         setError("Error fetching user profile");
@@ -30,7 +25,7 @@ const MyProfile = () => {
     };
 
     fetchProfile();
-  }, []); // Prazan niz znači da se useEffect pokreće samo jednom, pri mountanju komponente
+  }, []);
 
   const handleEditProfile = () => {
     navigate("/edit-profile");
@@ -49,12 +44,8 @@ const MyProfile = () => {
   };
 
   const handleGoHome = () => {
-    navigate("/"); // Navigate to home page
+    navigate("/");
   };
-
-  if (loading) {
-    return <div>Loading...</div>; // Prikazuje se dok se podaci učitavaju
-  }
 
   if (error) {
     return <div>Error: {error}</div>;
@@ -68,7 +59,10 @@ const MyProfile = () => {
         {/* Profile Picture */}
         <div className="flex justify-center mb-6">
           <img
-            src={user.profileImage || "https://cdn-icons-png.flaticon.com/512/847/847969.png"} // Dodana fallback slika
+            src={
+              user.profileImage ||
+              "https://cdn-icons-png.flaticon.com/512/847/847969.png"
+            }
             alt="Profile"
             className="h-24 w-24 rounded-full object-cover border-2 border-gray-600"
           />
