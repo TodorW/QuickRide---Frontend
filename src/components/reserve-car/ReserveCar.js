@@ -8,6 +8,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import ConfirmReservation from "../confirm-reservation/ConfirmReservation";
 import { useDispatch } from "react-redux";
 import { setReservationData } from "../../redux/reservationSlice";
+import { ArrowLeftIcon } from "@heroicons/react/24/solid";
 
 const ReserveCar = () => {
   const [startDate, setStartDate] = useState(null);
@@ -75,6 +76,10 @@ const ReserveCar = () => {
     }
   };
 
+  const handleGoBack = () => {
+    navigate(-1);
+  };
+
   useEffect(() => {
     calculateTotalPrice();
   }, [startDate, endDate]);
@@ -114,6 +119,12 @@ const ReserveCar = () => {
   return (
     <div className="bg-gray-900 min-h-screen text-gray-100">
       <Header />
+      <div className="pt-4 pl-4">
+        <button onClick={handleGoBack} className="flex items-center text-white">
+          <ArrowLeftIcon className="h-6 w-6" />
+          <span className="ml-2">Go Back</span>
+        </button>
+      </div>
       <div className="container mx-auto px-4 py-8">
         <h1 className="text-3xl font-bold mb-6">Reserve a Car</h1>
         {errorMessage && <p className="text-red-500 mb-4">{errorMessage}</p>}
