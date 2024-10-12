@@ -50,7 +50,7 @@ const Cars = () => {
         </h1>
 
         <div className="grid grid-cols-1 gap-y-10 sm:grid-cols-2 gap-x-6 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-8">
-          {cars.map((car, index) => (
+          {currentCars.map((car, index) => (
             <div
               key={car.id}
               className="overflow-hidden transition duration-300 transform bg-white rounded-lg shadow-md group dark:bg-gray-800 hover:scale-105 hover:shadow-xl animate-fade-in-up"
@@ -97,8 +97,8 @@ const Cars = () => {
             </div>
           ))}
         </div>
-
-        {cars.length === 0 && (
+        cars.map
+        {currentCars.length === 0 && (
           <div className="text-center animate-fade-in">
             <p className="text-xl text-gray-600 dark:text-gray-400">
               No available cars.
