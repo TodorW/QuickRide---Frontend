@@ -14,6 +14,7 @@ import ReviewForm from "./components/reviews/ReviewForm";
 import Car from "./components/single-car/Car";
 import ReserveCar from "./components/reserve-car/ReserveCar";
 import Dashboard from "./components/dashboard/Dashboard";
+import ReservationStatus from "./components/status/ReservationStatus";
 
 function App() {
   return (
@@ -29,6 +30,7 @@ function App() {
         <Route path="/car-reserve/:id" element={<ReserveCar />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/add-review" element={<ReviewForm />} />
+        <Route path="/reservation/status/:id" element={<ReservationStatus />} />
       </Routes>
     </Router>
   );
