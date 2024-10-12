@@ -1,14 +1,14 @@
 import { useEffect, useState } from "react";
 import { CarService, ReservationService, UserService } from "../../api/api";
 import { useNavigate, useParams } from "react-router-dom";
-import { addYears } from "date-fns";
+import { addYears, format } from "date-fns";
 import Header from "../layout/Header";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
 const ReserveCar = () => {
-  const [startDate, setStartDate] = useState("");
-  const [endDate, setEndDate] = useState("");
+  const [startDate, setStartDate] = useState(null);
+  const [endDate, setEndDate] = useState(null);
   const [errorMessage, setErrorMessage] = useState("");
   const [car, setCar] = useState([]);
   const [user, setUser] = useState([]);
@@ -55,11 +55,11 @@ const ReserveCar = () => {
     const adjustedEndDate = new Date(endDate);
     adjustedEndDate.setDate(adjustedEndDate.getDate() + 1);
 
-    const formattedStartDate = adjustedStartDate.toISOString().split("T")[0];
-    const formattedEndDate = adjustedEndDate.toISOString().split("T")[0];
-
-    console.log("Start date:", startDate.toISOString());
-    console.log("End date:", endDate.toISOString());
+    const formattedStartDate = format(
+      new Date(startDate),
+      "yyyy-MM-dd HH:mm:ss"
+    );
+    const formattedEndDate = format(new Date(endDate), "yyyy-MM-dd HH:mm:ss");
 
     const reservationData = {
       car_id: car.id,
@@ -164,13 +164,10 @@ const ReserveCar = () => {
             minDate={new Date()}
             maxDate={maxDate}
             filterDate={isDateDisabled}
-            dayClassName={(date) =>
-              isDateDisabled(date)
-                ? "bg-indigo-600 text-white cursor-pointer"
-                : " text-white cursor-not-allowed"
-            }
             className="block w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-md"
             placeholderText="Select start date"
+            showTimeSelect
+            dateFormat="yyyy-MM-dd HH:mm:ss" // Dodato vreme
           />
         </div>
 
@@ -185,13 +182,10 @@ const ReserveCar = () => {
             minDate={startDate || new Date()}
             maxDate={maxDate}
             filterDate={isDateDisabled}
-            dayClassName={(date) =>
-              isDateDisabled(date)
-                ? "bg-indigo-600 text-white cursor-pointer"
-                : " text-white cursor-not-allowed"
-            }
             className="block w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-md"
             placeholderText="Select end date"
+            showTimeSelect
+            dateFormat="yyyy-MM-dd HH:mm:ss" // Dodato vreme
           />
         </div>
 

@@ -5,105 +5,54 @@ import { CarService } from "../../api/api";
 import { useNavigate, useParams } from "react-router-dom";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import Popup from "../PopUp"; // Importujte Popup komponentu
-import Search from "../single-car/Search"; // Importujte Search komponentu
+import CarAvailabilityCalendar from "./CarAvailabilityCalendar";
 
 const Car = () => {
   const [car, setCar] = useState([]);
   const [startDate, setStartDate] = useState(null); // Početni datum rezervacije
   const [endDate, setEndDate] = useState(null); // Krajnji datum rezervacije
+  const [reservedDates, setReservedDates] = useState([]);
   const { id } = useParams();
   const navigate = useNavigate();
-  const [popupMessage, setPopupMessage] = useState("");
-  const [showPopup, setShowPopup] = useState(false);
-  const [cars, setCars] = useState([]); // Dodato za pretragu
 
   useEffect(() => {
-    const fetchCars = async () => {
+    const fetchCar = async () => {
       try {
         const response = await CarService.GetCar(id);
-        console.log(response.data);
         setCar(response.data.car);
       } catch (error) {
         console.log("Error fetching cars:", error);
       }
     };
-    fetchCars();
+
+    const fetchReservedDates = async () => {
+      try {
+        const response = await CarService.GetReservedDates(id);
+        setReservedDates(response.data.reserved_dates);
+      } catch (error) {
+        console.log("Error fetching reserved dates:", error);
+      }
+    };
+
+    fetchCar();
+    fetchReservedDates();
   }, [id]);
-
-  const availabilityText = car.availability ? "Available" : "Not Available";
-
-  const handleReserve = async () => {
-    try {
-      await CarService.ReserveCar(id, { startDate, endDate });
-      setPopupMessage("Zahtev je poslat, obavestićemo vas na mejl.");
-      setShowPopup(true);
-    } catch (error) {
-      console.error("Error during reservation:", error);
-      setPopupMessage("Došlo je do greške prilikom rezervacije.");
-      setShowPopup(true);
-    }
-  };
 
   return (
     <div className="bg-gray-900 min-h-screen text-gray-100">
       <Header />
-      <Search setCars={setCars} /> {/* Dodano za pretragu automobila */}
       <div className="pt-6 pb-4">
-        {/* Breadcrumb */}
-        {/* <nav aria-label="Breadcrumb">
-          <ol
-            role="list"
-            className="mx-auto flex max-w-2xl items-center space-x-2 px-4 sm:px-6 lg:max-w-7xl lg:px-8"
-          >
-            <li className="text-sm">
-              <a
-                href={car.make}
-                aria-current="page"
-                className="font-medium text-gray-400 hover:text-gray-300"
-              >
-                {car.make} {car.model}
-              </a>
-            </li>
-          </ol>
-        </nav> */}
-
         {/* Main content: image left, details right */}
         <div className="mx-auto mt-6 max-w-7xl lg:grid lg:grid-cols-2 lg:gap-x-8">
           {/* Image on the left */}
           <div className="aspect-h-4 aspect-w-3 overflow-hidden rounded-lg">
             <img
-              src={`http://tim1.cortexakademija.com/cars-images/${car.image}`}
+              src={`http://tim1.cortexakademija.com/storage/cars-images/${car.image}`}
               alt={`${car.make} ${car.model}`}
               className="w-full h-auto object-contain"
             />
-            {/* DatePicker component for reservation calendar */}
-            <div className="mt-4">
-              <h3 className="text-lg font-medium text-gray-100 mb-2">
-                Select Reservation Dates
-              </h3>
-              <div className="flex space-x-4">
-                <DatePicker
-                  selected={startDate}
-                  onChange={(date) => setStartDate(date)}
-                  selectsStart
-                  startDate={startDate}
-                  endDate={endDate}
-                  placeholderText="Start Date"
-                  className="text-gray-900 px-2 py-1 rounded-md"
-                />
-                <DatePicker
-                  selected={endDate}
-                  onChange={(date) => setEndDate(date)}
-                  selectsEnd
-                  startDate={startDate}
-                  endDate={endDate}
-                  minDate={startDate}
-                  placeholderText="End Date"
-                  className="text-gray-900 px-2 py-1 rounded-md"
-                />
-              </div>
-            </div>
+
+            <CarAvailabilityCalendar carId={car.id} />
           </div>
 
           {/* Product info on the right */}
@@ -120,17 +69,6 @@ const Car = () => {
 
             {/* Reviews */}
             {/* ... existing review code ... */}
-
-            {/* Product Availability */}
-            <div className="mt-4">
-              <span
-                className={`inline-block px-3 py-1 rounded-full text-sm font-semibold text-white ${
-                  car.availability ? "bg-green-600" : "bg-red-600"
-                }`}
-              >
-                {availabilityText}
-              </span>
-            </div>
 
             {/* Product Specifications */}
             <div className="mt-8 grid grid-cols-2 gap-6 text-gray-300">
@@ -182,7 +120,7 @@ const Car = () => {
 
             {/* Reserve button */}
             <button
-              onClick={handleReserve} // Change to call handleReserve
+              onClick={() => navigate(`/car-reserve/${car.id}`)}
               className="w-full px-4 py-2 mt-8 text-lg font-semibold text-white bg-indigo-600 rounded-md hover:bg-indigo-700"
             >
               Reserve
@@ -190,12 +128,6 @@ const Car = () => {
           </div>
         </div>
       </div>
-      {/* Popup for reservation message */}
-      <Popup
-        message={popupMessage}
-        show={showPopup}
-        onClose={() => setShowPopup(false)}
-      />
     </div>
   );
 };
