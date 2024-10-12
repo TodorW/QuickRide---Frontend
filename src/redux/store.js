@@ -1,9 +1,9 @@
 import { configureStore } from "@reduxjs/toolkit";
 import profileReducer from "./profileSlice";
-import carReducer from "./carSlice";
+import reservationReducer from "./reservationSlice";
 export const store = configureStore({
   reducer: {
     profile: profileReducer,
-    car: carReducer,
+    reservation: reservationReducer,
   },
 });

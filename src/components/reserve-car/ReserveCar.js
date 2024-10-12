@@ -5,6 +5,9 @@ import { addYears, format } from "date-fns";
 import Header from "../layout/Header";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import ConfirmReservation from "../confirm-reservation/ConfirmReservation";
+import { useDispatch } from "react-redux";
+import { setReservationData } from "../../redux/reservationSlice";
 
 const ReserveCar = () => {
   const [startDate, setStartDate] = useState(null);
@@ -14,7 +17,9 @@ const ReserveCar = () => {
   const [user, setUser] = useState([]);
   const [reservedDates, setReservedDates] = useState([]);
   const [totalPrice, setTotalPrice] = useState(0);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const { id } = useParams();
 
@@ -43,41 +48,18 @@ const ReserveCar = () => {
     fetchProfile();
   }, []);
 
-  const handleSendReservations = async () => {
-    if (!car || !startDate || !endDate) {
-      setErrorMessage("Please fill in all fields.");
-      return;
-    }
-
-    const adjustedStartDate = new Date(startDate);
-    adjustedStartDate.setDate(adjustedStartDate.getDate() + 1);
-
-    const adjustedEndDate = new Date(endDate);
-    adjustedEndDate.setDate(adjustedEndDate.getDate() + 1);
-
-    const formattedStartDate = format(
-      new Date(startDate),
-      "yyyy-MM-dd HH:mm:ss"
+  const handleSendReservations = () => {
+    dispatch(
+      setReservationData({
+        car,
+        user,
+        startDate: startDate ? startDate.toISOString() : null,
+        endDate: endDate ? endDate.toISOString() : null,
+        totalPrice,
+        reservedDates,
+      })
     );
-    const formattedEndDate = format(new Date(endDate), "yyyy-MM-dd HH:mm:ss");
-
-    const reservationData = {
-      car_id: car.id,
-      user_id: user.id,
-      start_date: formattedStartDate,
-      end_date: formattedEndDate,
-    };
-
-    console.log("Sending reservation data:", reservationData);
-
-    try {
-      const response = await ReservationService.StoreReservation(
-        reservationData
-      );
-      console.log("API Response", response);
-    } catch (error) {
-      console.log("Error sending reservation:", error);
-    }
+    setIsModalOpen(true);
   };
 
   const calculateTotalPrice = () => {
@@ -127,6 +109,8 @@ const ReserveCar = () => {
   const today = new Date();
   const maxDate = addYears(today, 1);
 
+  const isReserveButtonDisabled = !startDate || !endDate || !car.id;
+
   return (
     <div className="bg-gray-900 min-h-screen text-gray-100">
       <Header />
@@ -141,7 +125,6 @@ const ReserveCar = () => {
           <select
             id="car"
             className="block w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-md"
-            value={car}
             disabled
           >
             <option key={car.id} value={car.id}>
@@ -167,7 +150,7 @@ const ReserveCar = () => {
             className="block w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-md"
             placeholderText="Select start date"
             showTimeSelect
-            dateFormat="yyyy-MM-dd HH:mm:ss" // Dodato vreme
+            dateFormat="yyyy-MM-dd HH:mm:ss"
           />
         </div>
 
@@ -185,7 +168,7 @@ const ReserveCar = () => {
             className="block w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-md"
             placeholderText="Select end date"
             showTimeSelect
-            dateFormat="yyyy-MM-dd HH:mm:ss" // Dodato vreme
+            dateFormat="yyyy-MM-dd HH:mm:ss"
           />
         </div>
 
@@ -197,10 +180,20 @@ const ReserveCar = () => {
 
         <button
           onClick={handleSendReservations}
-          className="w-full px-4 py-2 bg-indigo-600 hover:bg-indigo-700 rounded-md text-white"
+          disabled={isReserveButtonDisabled}
+          className={`w-full px-4 py-2 rounded-md text-white transition-opacity duration-300 ${
+            isReserveButtonDisabled
+              ? "bg-gray-600 cursor-not-allowed opacity-50"
+              : "bg-indigo-600 hover:bg-indigo-700"
+          }`}
         >
           Reserve
         </button>
+        {isModalOpen && (
+          <>
+            <ConfirmReservation open={isModalOpen} setOpen={setIsModalOpen} />
+          </>
+        )}
       </div>
     </div>
   );

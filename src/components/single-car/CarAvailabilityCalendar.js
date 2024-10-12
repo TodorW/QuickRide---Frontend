@@ -38,6 +38,7 @@ const CarAvailabilityCalendar = ({ carId }) => {
       <DatePicker
         selected={null}
         onChange={() => {}}
+        minDate={new Date()}
         inline
         filterDate={(date) => !isDateDisabled(date)}
       />
