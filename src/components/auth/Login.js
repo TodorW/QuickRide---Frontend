@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, Link } from "react-router-dom"; // Import useNavigate for redirection
 import { FaEye, FaEyeSlash } from "react-icons/fa";
-import PopUpLogin from "../PopUpLogin"; // Ensure this path is correct
+import PopUpLogin from "../PopUpLogin";
 import { AuthService } from "../../api/api";
 
 const Login = () => {
@@ -9,13 +9,13 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [popupOpen, setPopupOpen] = useState(false);
-  const navigate = useNavigate(); // Initialize useNavigate
+  const [errorMessage, setErrorMessage] = useState("");
+  const navigate = useNavigate();
 
   const checkIfUserIsLoggedIn = () => {
     const token = localStorage.getItem("BearerToken");
     if (token) {
-      // If token exist's, user has already logged in
-      navigate("/home"); // Navigate user to other page
+      navigate("/home");
     }
   };
 
@@ -26,8 +26,14 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    if (!email.includes("@")) {
+      setErrorMessage("Please enter a valid email address.");
+      setPopupOpen(true);
+      return;
+    }
+
     if (password.length < 8) {
-      console.error("Password must be longer than 8 characters");
+      setErrorMessage("Password must be longer than 8 characters");
       setPopupOpen(true);
       return;
     }
@@ -39,12 +45,16 @@ const Login = () => {
 
     try {
       const response = await AuthService.login(loginUserData);
-      console.log("API Response", response);
-      // Assuming login is successful, redirect to /my-profile
-      navigate("/home");
+
+      if (response.status === 200) {
+        navigate("/home");
+      } else {
+        setErrorMessage("Invalid login credentials");
+        setPopupOpen(true);
+      }
     } catch (error) {
+      setErrorMessage(error.response.data.message);
       setPopupOpen(true);
-      console.error("Error calling registration API", error);
     }
   };
 
@@ -62,13 +72,7 @@ const Login = () => {
       </div>
 
       <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-        <form
-          action="#"
-          method="POST"
-          className="space-y-6"
-          onSubmit={handleSubmit}
-        >
-          {/* Input for email */}
+        <form className="space-y-6">
           <div>
             <label
               htmlFor="email"
@@ -89,7 +93,6 @@ const Login = () => {
             </div>
           </div>
 
-          {/* Input for password */}
           <div>
             <div className="flex items-center justify-between">
               <label
@@ -98,14 +101,6 @@ const Login = () => {
               >
                 Password
               </label>
-              <div className="text-sm">
-                <a
-                  href="#"
-                  className="font-semibold text-indigo-400 hover:text-indigo-300"
-                >
-                  Forgot password?
-                </a>
-              </div>
             </div>
             <div className="mt-2 relative">
               <input
@@ -119,7 +114,7 @@ const Login = () => {
               />
               <div
                 className="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer"
-                onClick={() => setPasswordVisible(!passwordVisible)} // Toggle password visibility
+                onClick={() => setPasswordVisible(!passwordVisible)}
               >
                 {passwordVisible ? (
                   <FaEyeSlash className="text-gray-400" />
@@ -130,10 +125,11 @@ const Login = () => {
             </div>
           </div>
 
-          {/* Submit button */}
+          {/* Submit dugme */}
           <div>
             <button
-              type="submit"
+              type="button"
+              onClick={handleSubmit}
               className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
             >
               Sign in
@@ -153,7 +149,11 @@ const Login = () => {
       </p>
 
       {/* Popup Component */}
-      <PopUpLogin open={popupOpen} onClose={() => setPopupOpen(false)} />
+      <PopUpLogin
+        open={popupOpen}
+        onClose={() => setPopupOpen(false)}
+        message={errorMessage}
+      />
     </div>
   );
 };

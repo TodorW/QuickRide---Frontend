@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate, Link } from "react-router-dom"; // Import useNavigate for redirection
+import { useNavigate, Link } from "react-router-dom";
 import { AuthService } from "../../api/api";
-import PopUp from "../PopUp";
+import PopUpLogin from "../PopUpLogin";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 const SignUp = () => {
@@ -12,13 +12,13 @@ const SignUp = () => {
   const [popupOpen, setPopupOpen] = useState(false);
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [confirmPasswordVisible, setConfirmPasswordVisible] = useState(false);
-  const navigate = useNavigate(); // Initialize useNavigate
+  const [errorMessage, setErrorMessage] = useState("");
+  const navigate = useNavigate();
 
   const checkIfUserIsLoggedIn = () => {
     const token = localStorage.getItem("BearerToken");
     if (token) {
-      // If token exist's, user has already logged in
-      navigate("home"); // Navigate user to other page
+      navigate("home");
     }
   };
 
@@ -29,8 +29,14 @@ const SignUp = () => {
   const createAccount = async (e) => {
     e.preventDefault();
 
+    if (!email.includes("@")) {
+      setErrorMessage("Please enter a valid email address.");
+      setPopupOpen(true);
+      return;
+    }
+
     if (password.length < 8) {
-      console.error("Password must be longer than 8 characters");
+      setErrorMessage("Password must be longer than 8 characters.");
       setPopupOpen(true);
       return;
     }
@@ -44,12 +50,9 @@ const SignUp = () => {
 
     try {
       const response = await AuthService.register(registerUserData);
-      // Success logic, redirect to login page
-      navigate("/login"); // Redirect to login page
-      console.log("API Response", response);
+      navigate("/login");
     } catch (error) {
-      console.error("Error calling registration API", error);
-      // Open popup for existing account
+      setErrorMessage(error.response.data.message);
       setPopupOpen(true);
     }
   };
@@ -160,7 +163,6 @@ const SignUp = () => {
                 onChange={(e) => setConfirmedPassword(e.target.value)}
                 className="block w-full rounded-md border-0 py-2 px-3 text-gray-100 bg-gray-800 shadow-sm ring-1 ring-inset ring-gray-700 placeholder:text-gray-500 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
               />
-
               <div
                 className="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer"
                 onClick={() =>
@@ -197,7 +199,11 @@ const SignUp = () => {
         </Link>
       </p>
 
-      <PopUp open={popupOpen} onClose={() => setPopupOpen(false)} />
+      <PopUpLogin
+        open={popupOpen}
+        onClose={() => setPopupOpen(false)}
+        message={errorMessage}
+      />
     </div>
   );
 };
