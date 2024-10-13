@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useNavigate, Link } from "react-router-dom"; // Import useNavigate for redirection
 import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/solid";
 import PopUpLogin from "../PopUpError";
@@ -12,16 +12,16 @@ const Login = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const navigate = useNavigate();
 
-  const checkIfUserIsLoggedIn = () => {
+  const checkIfUserIsLoggedIn = useCallback(() => {
     const token = localStorage.getItem("BearerToken");
     if (token) {
       navigate("/home");
     }
-  };
+  }, [navigate]);
 
   useEffect(() => {
     checkIfUserIsLoggedIn();
-  }, []);
+  }, [checkIfUserIsLoggedIn]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -44,7 +44,7 @@ const Login = () => {
     };
 
     try {
-      const response = await AuthService.login(loginUserData);
+      await AuthService.login(loginUserData);
       navigate("/home");
     } catch (error) {
       setErrorMessage(error.response.data.message || "An error occurred");
