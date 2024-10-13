@@ -9,6 +9,7 @@ import ConfirmReservation from "../confirm-reservation/ConfirmReservation";
 import { useDispatch } from "react-redux";
 import { setReservationData } from "../../redux/reservationSlice";
 import { ArrowLeftIcon } from "@heroicons/react/24/solid";
+import PopUpSuccess from "../PopUpSucces";
 
 const ReserveCar = () => {
   const [startDate, setStartDate] = useState(null);
@@ -18,6 +19,7 @@ const ReserveCar = () => {
   const [reservedDates, setReservedDates] = useState([]);
   const [totalPrice, setTotalPrice] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [successMessage, setSuccessMessage] = useState("");
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -46,6 +48,10 @@ const ReserveCar = () => {
     };
     fetchProfile();
   }, []);
+
+  const handleSuccessMessage = (message) => {
+    setSuccessMessage(message);
+  };
 
   const handleSendReservations = () => {
     const adjustedStartDate = new Date(startDate);
@@ -203,9 +209,19 @@ const ReserveCar = () => {
         >
           Reserve
         </button>
-        {isModalOpen && (
-          <ConfirmReservation open={isModalOpen} setOpen={setIsModalOpen} />
+        {successMessage && (
+          <PopUpSuccess
+            open={true}
+            onClose={() => setSuccessMessage("")}
+            message={successMessage}
+          />
         )}
+
+        <ConfirmReservation
+          open={isModalOpen}
+          setOpen={setIsModalOpen}
+          onSuccess={handleSuccessMessage}
+        />
       </div>
     </div>
   );

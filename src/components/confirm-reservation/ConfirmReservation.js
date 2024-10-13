@@ -9,7 +9,7 @@ import { format } from "date-fns";
 import PopUpError from "../PopUpError";
 import PopUpSucces from "../PopUpSucces";
 
-const ConfirmReservation = ({ open, setOpen }) => {
+const ConfirmReservation = ({ open, setOpen, onSuccess }) => {
   const [isErrorPopUpOpen, setIsErrorPopUpOpen] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [isSuccesPopUpOpen, setIsSuccesPopUpOpen] = useState(false);
@@ -33,7 +33,7 @@ const ConfirmReservation = ({ open, setOpen }) => {
 
     try {
       await ReservationService.StoreReservation(reservationData);
-      setSuccesMessage("Reservation is pending!");
+      onSuccess("Reservation is pending!");
       setIsSuccesPopUpOpen(true);
       setOpen(false);
     } catch (error) {
@@ -155,7 +155,7 @@ const ConfirmReservation = ({ open, setOpen }) => {
                       />
                     )}
                     {isSuccesPopUpOpen && (
-                      <PopUpError
+                      <PopUpSucces
                         open={isSuccesPopUpOpen}
                         onClose={() => setIsSuccesPopUpOpen(false)}
                         message={succesMessage}
