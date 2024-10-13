@@ -13,7 +13,6 @@ import { ArrowLeftIcon } from "@heroicons/react/24/solid";
 const ReserveCar = () => {
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
-  const [errorMessage, setErrorMessage] = useState("");
   const [car, setCar] = useState([]);
   const [user, setUser] = useState([]);
   const [reservedDates, setReservedDates] = useState([]);
@@ -130,7 +129,6 @@ const ReserveCar = () => {
       </div>
       <div className="container mx-auto px-4 py-8">
         <h1 className="text-3xl font-bold mb-6">Reserve a Car</h1>
-        {errorMessage && <p className="text-red-500 mb-4">{errorMessage}</p>}
 
         <div className="mb-4">
           <label htmlFor="car" className="block mb-2 text-sm font-medium">

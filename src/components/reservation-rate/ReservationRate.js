@@ -2,11 +2,17 @@ import React, { useEffect, useState } from "react";
 import Header from "../layout/Header";
 import { RatingService, ReservationService } from "../../api/api";
 import { useParams } from "react-router-dom";
+import PopUpSuccess from "../PopUpSucces";
+import PopUpError from "../PopUpError";
 
 const ReservationRate = () => {
   const [rating, setRating] = useState(0);
   const [review, setReview] = useState("");
+  const [showSuccessPopup, setShowSuccessPopup] = useState(false);
+  const [showErrorPopup, setShowErrorPopup] = useState(false);
   const [reservation, setReservation] = useState([]);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
   const { id } = useParams();
 
   useEffect(() => {
@@ -31,8 +37,12 @@ const ReservationRate = () => {
 
     try {
       await RatingService.StoreRating(ratingData, id, reservation.car_id);
+      setShowSuccessPopup(true);
+      setSuccessMessage("Rating added successfully!");
     } catch (error) {
       console.error(error);
+      setErrorMessage(error.response.data.message);
+      setShowErrorPopup(true);
     }
   };
 
@@ -61,7 +71,10 @@ const ReservationRate = () => {
                   ★
                 </span>
               ))}
-            </div>
+            </div>{" "}
+            <p className="mt-2 text-sm text-gray-400">
+              Review is optional, but we appreciate your feedback!
+            </p>
             <textarea
               className="w-full p-3 border border-gray-600 rounded-lg mb-4 bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition duration-200"
               rows="4"
@@ -79,6 +92,17 @@ const ReservationRate = () => {
           </form>
         </div>
       </div>
+      <PopUpError
+        open={showErrorPopup}
+        onClose={() => setShowErrorPopup(false)}
+        message={errorMessage}
+      />
+
+      <PopUpSuccess
+        open={showSuccessPopup}
+        onClose={() => setShowSuccessPopup(false)}
+        message={successMessage}
+      />
     </>
   );
 };
