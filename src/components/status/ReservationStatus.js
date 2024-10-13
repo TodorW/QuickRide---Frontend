@@ -1,5 +1,5 @@
-import React from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import {
   CheckCircleIcon,
   ClockIcon,
@@ -7,52 +7,55 @@ import {
   ArrowPathIcon,
   ArrowLeftIcon,
 } from "@heroicons/react/24/solid";
+import { ReservationService } from "../../api/api";
 
 const statusSteps = [
-  {
-    label: "Pending",
-    value: "pending",
-    icon: ClockIcon,
-  },
-  {
-    label: "Reserved",
-    value: "reserved",
-    icon: CheckCircleIcon,
-  },
-  {
-    label: "In Use",
-    value: "in use",
-    icon: TruckIcon,
-  },
-  {
-    label: "Returned",
-    value: "returned",
-    icon: ArrowPathIcon,
-  },
+  { label: "Pending", value: "pending", icon: ClockIcon },
+  { label: "Reserved", value: "reserved", icon: CheckCircleIcon },
+  { label: "In Use", value: "in use", icon: TruckIcon },
+  { label: "Returned", value: "returned", icon: ArrowPathIcon },
 ];
 
 const getStatusIndex = (status) => {
-  switch (status) {
-    case "pending":
-      return 0;
-    case "reserved":
-      return 1;
-    case "in use":
-      return 2;
-    case "returned":
-      return 3;
-    default:
-      return 0;
-  }
+  return statusSteps.findIndex((step) => step.value === status) || 0;
 };
 
-const ReservationStatus = ({ currentStatus }) => {
+const ReservationStatus = () => {
   const navigate = useNavigate();
-  const currentStatusIndex = getStatusIndex(currentStatus);
+  const { id } = useParams();
+  const [reservation, setReservation] = useState(null);
 
   const handleGoBack = () => {
     navigate(-1);
   };
+
+  const fetchReservation = async () => {
+    try {
+      const response = await ReservationService.ShowReservation(id);
+      setReservation(response.data.reservation);
+    } catch (error) {
+      console.error("Error fetching reservation:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchReservation();
+
+    // Api recalling every 5 seconds
+    const intervalId = setInterval(() => {
+      fetchReservation();
+    }, 5000);
+
+    return () => {
+      clearInterval(intervalId);
+    };
+  }, [id]);
+
+  if (!reservation) {
+    return <div>Loading...</div>;
+  }
+
+  const currentStatusIndex = getStatusIndex(reservation.status);
 
   return (
     <div className="min-h-screen py-12 bg-gray-900 flex items-center justify-center">
@@ -60,9 +63,10 @@ const ReservationStatus = ({ currentStatus }) => {
         <h2 className="mb-8 text-5xl font-extrabold text-white text-center">
           Reservation Status
         </h2>
-        <div className="flex items-center justify-center space-x-8">
+        <div className="flex items-center justify-center space-x-8 flex-wrap">
           {statusSteps.map((step, index) => {
             const isActive = index <= currentStatusIndex;
+            const lineColor = isActive ? "bg-indigo-500" : "bg-gray-400";
             return (
               <React.Fragment key={step.value}>
                 <div className="flex flex-col items-center">
@@ -70,7 +74,7 @@ const ReservationStatus = ({ currentStatus }) => {
                     className={`transition-colors duration-300 ${
                       isActive ? "text-indigo-500" : "text-gray-400"
                     }`}
-                    style={{ width: "158.25px", height: "168px" }}
+                    style={{ width: "120px", height: "120px" }}
                   />
                   <p
                     className={`text-sm font-medium mt-2 transition-colors duration-300 ${
@@ -81,7 +85,7 @@ const ReservationStatus = ({ currentStatus }) => {
                   </p>
                 </div>
                 {index < statusSteps.length - 1 && (
-                  <div className="h-0.5 w-8 bg-gray-400" />
+                  <div className={`h-0.5 w-12 ${lineColor}`} />
                 )}
               </React.Fragment>
             );
@@ -98,4 +102,5 @@ const ReservationStatus = ({ currentStatus }) => {
     </div>
   );
 };
+
 export default ReservationStatus;

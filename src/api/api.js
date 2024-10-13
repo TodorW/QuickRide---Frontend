@@ -104,4 +104,7 @@ export const ReservationService = {
   ListUsersReservations(userId) {
     return client.get(`reservations/users/${userId}`);
   },
+  ShowReservation(reservationId) {
+    return client.get(`reservations/${reservationId}`);
+  },
 };

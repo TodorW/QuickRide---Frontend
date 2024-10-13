@@ -10,8 +10,6 @@ import CarAvailabilityCalendar from "./CarAvailabilityCalendar";
 
 const Car = () => {
   const [car, setCar] = useState([]);
-  const [startDate, setStartDate] = useState(null); // Početni datum rezervacije
-  const [endDate, setEndDate] = useState(null); // Krajnji datum rezervacije
   const [reservedDates, setReservedDates] = useState([]);
   const { id } = useParams();
   const navigate = useNavigate();
