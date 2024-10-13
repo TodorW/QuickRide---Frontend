@@ -80,6 +80,9 @@ export const UserService = {
   GetProfile() {
     return client.get("user");
   },
+  EditProfile(userData) {
+    return client.put("user", userData);
+  },
 };
 
 export const CarService = {

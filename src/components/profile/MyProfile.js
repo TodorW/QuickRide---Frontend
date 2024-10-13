@@ -75,41 +75,11 @@ const MyProfile = () => {
       <div className="sm:mx-auto sm:w-full sm:max-w-lg bg-gray-800 p-6 rounded-md shadow-md">
         <h2 className="text-center text-2xl font-bold mb-8">My Profile</h2>
 
-        {/* Profile Picture */}
-        <div className="flex justify-center mb-6">
-          <img
-            src={
-              user.profileImage ||
-              "https://cdn-icons-png.flaticon.com/512/847/847969.png"
-            }
-            alt="Profile"
-            className="h-24 w-24 rounded-full object-cover border-2 border-gray-600"
-          />
-        </div>
-
         {/* Basic Information */}
         <div className="mb-4">
           <h3 className="text-lg font-semibold">Basic Information</h3>
           <p>Name: {user.name}</p>
           <p>Email: {user.email}</p>
-        </div>
-        {/* Contact Information */}
-        <div className="mb-4">
-          <h3 className="text-lg font-semibold">Contact Information</h3>
-          <p>Phone: {user.phone}</p>
-          <p>Address: {user.address}</p>
-        </div>
-        {/* Bio */}
-        <div className="mb-4">
-          <h3 className="text-lg font-semibold">Bio</h3>
-          <p>{bio}</p>
-        </div>
-        {/* Additional Information */}
-        <div className="mb-4">
-          <h3 className="text-lg font-semibold">Additional Information</h3>
-          <p>Birth Date: {user.birthDate}</p>
-          <p>Gender: {user.gender}</p>
-          <p>Privacy Settings: {user.privacy}</p>
         </div>
 
         {/* Buttons for Editing and Logging Out */}

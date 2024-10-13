@@ -5,8 +5,17 @@ import {
   DialogPanel,
   DialogTitle,
 } from "@headlessui/react";
+import { CheckCircleIcon } from "@heroicons/react/24/solid";
+import { useNavigate } from "react-router-dom";
 
 const PopUpSuccess = ({ open, onClose, message }) => {
+  const navigate = useNavigate();
+
+  const goToHome = () => {
+    navigate("/home");
+    onClose();
+  };
+
   return (
     <Dialog open={open} onClose={onClose} className="relative z-10">
       <DialogBackdrop
@@ -22,21 +31,11 @@ const PopUpSuccess = ({ open, onClose, message }) => {
           >
             <div className="bg-gray-800 px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
               <div className="sm:flex sm:items-start">
-                <div className="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-green-600 sm:mx-0 sm:h-10 sm:w-10">
-                  <svg
+                <div className="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-indigo-600 sm:mx-0 sm:h-10 sm:w-10">
+                  <CheckCircleIcon
                     className="h-6 w-6 text-white"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M9 12l2 2 4-4m0 0a9 9 0 11-6-3.828"
-                    />
-                  </svg>
+                    aria-hidden="true"
+                  />
                 </div>
                 <div className="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
                   <DialogTitle
@@ -54,10 +53,10 @@ const PopUpSuccess = ({ open, onClose, message }) => {
             <div className="bg-gray-800 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
               <button
                 type="button"
-                onClick={onClose}
-                className="inline-flex w-full justify-center rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-500 sm:w-auto transition duration-200"
+                onClick={goToHome}
+                className="inline-flex w-full justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 sm:w-auto transition duration-200"
               >
-                OK
+                Go to home
               </button>
             </div>
           </DialogPanel>
