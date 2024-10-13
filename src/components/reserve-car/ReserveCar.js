@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { CarService, ReservationService, UserService } from "../../api/api";
 import { useNavigate, useParams } from "react-router-dom";
-import { addYears, format } from "date-fns";
+import { addYears } from "date-fns";
 import Header from "../layout/Header";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -28,14 +28,13 @@ const ReserveCar = () => {
     const fetchCars = async () => {
       try {
         const response = await CarService.GetCar(id);
-        console.log(response.data);
         setCar(response.data.car);
       } catch (error) {
         console.log("Error fetching cars:", error);
       }
     };
     fetchCars();
-  }, []);
+  }, [id]);
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -50,12 +49,18 @@ const ReserveCar = () => {
   }, []);
 
   const handleSendReservations = () => {
+    // Postavljamo vreme na 11:00 za start i 09:00 za end
+    const adjustedStartDate = new Date(startDate);
+    adjustedStartDate.setHours(11, 0, 0); // 11:00
+    const adjustedEndDate = new Date(endDate);
+    adjustedEndDate.setHours(9, 0, 0); // 09:00
+
     dispatch(
       setReservationData({
         car,
         user,
-        startDate: startDate ? startDate.toISOString() : null,
-        endDate: endDate ? endDate.toISOString() : null,
+        startDate: adjustedStartDate.toISOString(),
+        endDate: adjustedEndDate.toISOString(),
         totalPrice,
         reservedDates,
       })
@@ -89,7 +94,6 @@ const ReserveCar = () => {
       try {
         const response = await ReservationService.ListCarsReservedDates(car.id);
         setReservedDates(response.data.reserved_dates);
-        console.log(reservedDates);
       } catch (error) {
         console.log("Error fetching reserved dates:", error);
       }
@@ -99,10 +103,8 @@ const ReserveCar = () => {
 
   const isDateDisabled = (date) => {
     const selectedDate = new Date(date);
-
     return !reservedDates.some((reservedDate) => {
       const formattedReservedDate = new Date(reservedDate);
-
       return (
         selectedDate.getFullYear() === formattedReservedDate.getFullYear() &&
         selectedDate.getMonth() === formattedReservedDate.getMonth() &&
@@ -113,17 +115,13 @@ const ReserveCar = () => {
 
   const today = new Date();
   const maxDate = addYears(today, 1);
-
   const isReserveButtonDisabled = !startDate || !endDate || !car.id;
 
   return (
     <div className="bg-gray-900 min-h-screen text-gray-100">
       <Header />
-      <div className="relative">
-        <button
-          onClick={handleGoBack}
-          className="absolute top-4 left-4 flex items-center text-gray-900 dark:text-white bg-indigo-600 px-4 py-2 rounded-md shadow-md hover:bg-indigo-700 transition-colors duration-300"
-        >
+      <div className="pt-4 pl-4">
+        <button onClick={handleGoBack} className="flex items-center text-white">
           <ArrowLeftIcon className="h-6 w-6" />
           <span className="ml-2">Go Back</span>
         </button>
@@ -163,8 +161,7 @@ const ReserveCar = () => {
             filterDate={isDateDisabled}
             className="block w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-md"
             placeholderText="Select start date"
-            showTimeSelect
-            dateFormat="yyyy-MM-dd HH:mm:ss"
+            dateFormat="yyyy-MM-dd"
           />
         </div>
 
@@ -181,14 +178,17 @@ const ReserveCar = () => {
             filterDate={isDateDisabled}
             className="block w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-md"
             placeholderText="Select end date"
-            showTimeSelect
-            dateFormat="yyyy-MM-dd HH:mm:ss"
+            dateFormat="yyyy-MM-dd"
           />
         </div>
 
         {totalPrice !== null && (
           <div className="mt-4 text-lg">
             <p>Total price: ${totalPrice}</p>
+            <p className="mt-2 text-sm text-gray-400">
+              Note: Each reservation starts on the day at 11 AM, and the vehicle
+              must be returned by 9 AM on the return day.
+            </p>
           </div>
         )}
 
@@ -204,9 +204,7 @@ const ReserveCar = () => {
           Reserve
         </button>
         {isModalOpen && (
-          <>
-            <ConfirmReservation open={isModalOpen} setOpen={setIsModalOpen} />
-          </>
+          <ConfirmReservation open={isModalOpen} setOpen={setIsModalOpen} />
         )}
       </div>
     </div>

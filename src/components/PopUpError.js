@@ -6,7 +6,7 @@ import {
   DialogTitle,
 } from "@headlessui/react";
 
-const PopUp = ({ open, onClose, message }) => {
+const PopUpError = ({ open, onClose, message }) => {
   return (
     <Dialog open={open} onClose={onClose} className="relative z-10">
       <DialogBackdrop
@@ -67,4 +67,4 @@ const PopUp = ({ open, onClose, message }) => {
   );
 };
 
-export default PopUp;
+export default PopUpError;
