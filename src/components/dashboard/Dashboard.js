@@ -1,5 +1,10 @@
 import { useNavigate } from "react-router-dom";
-import { ReservationService, UserService, CarService } from "../../api/api";
+import {
+  ReservationService,
+  UserService,
+  CarService,
+  RatingService,
+} from "../../api/api";
 import { useState, useEffect } from "react";
 import Header from "../layout/Header";
 
@@ -7,6 +12,7 @@ const ReservationsDashboard = () => {
   const [reservations, setReservations] = useState([]);
   const [user, setUser] = useState([]);
   const [cars, setCars] = useState({});
+  const [ratedStatus, setRatedStatus] = useState({});
 
   const navigate = useNavigate();
 
@@ -54,6 +60,29 @@ const ReservationsDashboard = () => {
       fetchReservations();
     }
   }, [user.id]);
+
+  useEffect(() => {
+    const checkIsRated = async (reservationId, carId) => {
+      try {
+        const response = await RatingService.CheckIsRated(reservationId, carId);
+        setRatedStatus((prevStatus) => ({
+          ...prevStatus,
+          [reservationId]: response.data.rated,
+        }));
+      } catch (error) {
+        console.log(
+          `Error checking if reservation ${reservationId} is rated:`,
+          error
+        );
+      }
+    };
+
+    if (reservations.length > 0) {
+      reservations.forEach((reservation) => {
+        checkIsRated(reservation.id, reservation.car_id);
+      });
+    }
+  }, [reservations]);
 
   return (
     <>
@@ -133,14 +162,18 @@ const ReservationsDashboard = () => {
                       onClick={() =>
                         navigate(`/reservation/rate/${reservation.id}`)
                       }
-                      disabled={reservation.status !== "returned"}
+                      disabled={
+                        reservation.status !== "returned" ||
+                        ratedStatus[reservation.id]
+                      }
                       className={`px-4 py-2 text-sm font-semibold text-white ${
-                        reservation.status === "returned"
+                        reservation.status === "returned" &&
+                        !ratedStatus[reservation.id]
                           ? "bg-yellow-600 hover:bg-yellow-700 dark:bg-yellow-500 dark:hover:bg-yellow-600 transition duration-200"
                           : "bg-yellow-300 cursor-not-allowed"
                       } rounded-md`}
                     >
-                      Rate
+                      {ratedStatus[reservation.id] ? "Already Rated" : "Rate"}
                     </button>
                   </div>
                 </div>

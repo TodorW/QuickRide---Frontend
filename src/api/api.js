@@ -116,4 +116,9 @@ export const RatingService = {
       rateData
     );
   },
+  CheckIsRated(reservationId, carId) {
+    return client.get(
+      `reservations/${reservationId}}/car/${carId}/check-rating`
+    );
+  },
 };
