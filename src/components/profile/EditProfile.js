@@ -95,15 +95,16 @@ const EditProfile = () => {
 
   return (
     <div className="flex min-h-screen flex-col justify-center bg-gray-900 px-6 py-12 lg:px-8 text-white">
-      <div className="sm:mx-auto sm:w-full sm:max-w-lg bg-gray-800 p-6 rounded-md shadow-md">
+      <div className="mb-2">
         <button
           onClick={handleGoBack}
-          className="absolute top-4 left-4 flex items-center text-gray-900 dark:text-white bg-indigo-600 px-4 py-2 rounded-md shadow-md hover:bg-indigo-700 transition-colors duration-300"
+          className="flex items-center text-gray-900 dark:text-white bg-indigo-600 px-4 py-2 rounded-md shadow-md hover:bg-indigo-700 transition-colors duration-300 mt-2" // Dodan mt-2 za dodatni razmak iznad dugmeta
         >
           <ArrowLeftIcon className="h-6 w-6" />
           <span className="ml-2">Go Back</span>
         </button>
-
+      </div>
+      <div className="sm:mx-auto sm:w-full sm:max-w-lg bg-gray-800 p-6 rounded-md shadow-md">
         <h2 className="text-center text-2xl font-bold mb-8">Edit Profile</h2>
 
         {error && <div className="mb-4 text-red-500">{error}</div>}

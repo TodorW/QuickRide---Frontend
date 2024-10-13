@@ -51,6 +51,16 @@ const ReservationStatus = () => {
     };
   }, [id]);
 
+  if (!reservation) {
+    return (
+      <div className="min-h-screen py-12 bg-gray-900 flex items-center justify-center">
+        <h2 className="mb-8 text-5xl font-extrabold text-white text-center">
+          Loading...
+        </h2>
+      </div>
+    );
+  }
+
   const currentStatusIndex = getStatusIndex(reservation.status);
 
   return (
