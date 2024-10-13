@@ -11,21 +11,8 @@ import {
   PopoverGroup,
   PopoverPanel,
 } from "@headlessui/react";
-import {
-  ArrowPathIcon,
-  Bars3Icon,
-  ChartPieIcon,
-  CursorArrowRaysIcon,
-  FingerPrintIcon,
-  SquaresPlusIcon,
-  XMarkIcon,
-  UserIcon,
-} from "@heroicons/react/24/outline";
-import {
-  ChevronDownIcon,
-  PhoneIcon,
-  PlayCircleIcon,
-} from "@heroicons/react/20/solid";
+import { Bars3Icon, XMarkIcon, UserIcon } from "@heroicons/react/24/outline";
+import { ChevronDownIcon } from "@heroicons/react/20/solid";
 import { useNavigate } from "react-router-dom";
 
 const Header = () => {
@@ -67,7 +54,7 @@ const Header = () => {
       >
         <div className="flex lg:flex-1">
           <a href="/home" className="-m-1.5 p-1.5">
-            <span className="sr-only">Your Company</span>
+            <span className="sr-only">QuickRide</span>
             <img
               alt=""
               src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
@@ -147,7 +134,7 @@ const Header = () => {
         <DialogPanel className="fixed inset-y-0 right-0 z-10 w-full overflow-y-auto bg-gray-900 px-6 py-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10">
           <div className="flex items-center justify-between">
             <a href="#" className="-m-1.5 p-1.5">
-              <span className="sr-only">Your Company</span>
+              <span className="sr-only">Quick Ride</span>
               <img
                 alt=""
                 src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
@@ -166,34 +153,26 @@ const Header = () => {
           <div className="mt-6 flow-root">
             <div className="-my-6 divide-y divide-gray-500/10">
               <div className="space-y-2 py-6">
-                <Disclosure as="div" className="-mx-3">
-                  <DisclosureButton className="group flex w-full items-center justify-between rounded-lg py-2 pl-3 pr-3.5 text-base font-semibold leading-7 text-gray-200 hover:bg-gray-800">
-                    Product
-                    <ChevronDownIcon
-                      aria-hidden="true"
-                      className="h-5 w-5 flex-none text-gray-400"
-                    />
-                  </DisclosureButton>
-                  <DisclosurePanel className="mt-2 space-y-2"></DisclosurePanel>
-                </Disclosure>
                 <a
-                  href="#"
+                  href="/home"
                   className="block rounded-lg py-2 pl-3 pr-3 text-base font-semibold leading-7 text-gray-200 hover:bg-gray-700"
                 >
-                  Features
+                  Home
                 </a>
                 <a
-                  href="#"
+                  href="/dashboard"
                   className="block rounded-lg py-2 pl-3 pr-3 text-base font-semibold leading-7 text-gray-200 hover:bg-gray-700"
                 >
-                  Marketplace
+                  Dashboard
                 </a>
-                <a
-                  href="#"
-                  className="block rounded-lg py-2 pl-3 pr-3 text-base font-semibold leading-7 text-gray-200 hover:bg-gray-700"
-                >
-                  Company
-                </a>
+                {isAdmin ? (
+                  <a
+                    href="http://tim1.cortexakademija.com/admin"
+                    className="block rounded-lg py-2 pl-3 pr-3 text-base font-semibold leading-7 text-gray-200 hover:bg-gray-700"
+                  >
+                    Admin Panel
+                  </a>
+                ) : null}
               </div>
               <div className="py-6">
                 <a
@@ -202,6 +181,12 @@ const Header = () => {
                 >
                   Profile
                 </a>
+                <button
+                  onClick={handleLogout}
+                  className="block rounded-lg py-2.5 px-3 text-base font-semibold leading-7 text-gray-200 hover:bg-gray-700 w-full text-left"
+                >
+                  Logout
+                </button>
               </div>
             </div>
           </div>

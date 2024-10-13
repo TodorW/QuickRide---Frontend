@@ -12,21 +12,16 @@ const MyProfile = () => {
   const navigate = useNavigate();
 
   const [user, setUser] = useState({});
-  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [bio, setBio] = useState("");
 
   useEffect(() => {
     const fetchProfile = async () => {
       try {
         const response = await UserService.GetProfile();
         setUser(response.data.user);
-        setBio(response.data.user.bio);
       } catch (error) {
-        console.log("Error fetching user:", error);
         setError("Error fetching user profile");
       }
-      setLoading(false);
     };
 
     fetchProfile();
