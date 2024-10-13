@@ -51,10 +51,6 @@ const ReservationStatus = () => {
     };
   }, [id]);
 
-  if (!reservation) {
-    return <div>Loading...</div>;
-  }
-
   const currentStatusIndex = getStatusIndex(reservation.status);
 
   return (

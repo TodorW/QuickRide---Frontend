@@ -55,7 +55,7 @@ const PopUpError = ({ open, onClose, message }) => {
               <button
                 type="button"
                 onClick={onClose}
-                className="inline-flex w-full justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 sm:w-auto"
+                className="inline-flex w-full justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 sm:w-auto transition duration-200"
               >
                 OK
               </button>

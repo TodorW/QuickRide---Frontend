@@ -49,11 +49,10 @@ const ReserveCar = () => {
   }, []);
 
   const handleSendReservations = () => {
-    // Postavljamo vreme na 11:00 za start i 09:00 za end
     const adjustedStartDate = new Date(startDate);
-    adjustedStartDate.setHours(11, 0, 0); // 11:00
+    adjustedStartDate.setHours(11, 0, 0);
     const adjustedEndDate = new Date(endDate);
-    adjustedEndDate.setHours(9, 0, 0); // 09:00
+    adjustedEndDate.setHours(9, 0, 0);
 
     dispatch(
       setReservationData({
@@ -198,7 +197,7 @@ const ReserveCar = () => {
           className={`w-full px-4 py-2 rounded-md text-white transition-opacity duration-300 ${
             isReserveButtonDisabled
               ? "bg-gray-600 cursor-not-allowed opacity-50"
-              : "bg-indigo-600 hover:bg-indigo-700"
+              : "bg-indigo-600 hover:bg-indigo-700 transition duration-200"
           }`}
         >
           Reserve

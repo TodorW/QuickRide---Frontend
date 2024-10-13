@@ -108,3 +108,12 @@ export const ReservationService = {
     return client.get(`reservations/${reservationId}`);
   },
 };
+
+export const RatingService = {
+  StoreRating(rateData, reservationId, carId) {
+    return client.post(
+      `reservations/${reservationId}}/rate/${carId}`,
+      rateData
+    );
+  },
+};

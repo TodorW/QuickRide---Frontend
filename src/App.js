@@ -7,10 +7,10 @@ import {
 } from "react-router-dom";
 import Login from "./components/auth/Login";
 import SignUp from "./components/auth/SignUp";
-import MyProfile from "./components/profile/MyProfile"; // Import MyProfile component
+import MyProfile from "./components/profile/MyProfile";
 import EditProfile from "./components/profile/EditProfile";
 import Home from "./components/home/Home";
-import ReviewForm from "./components/reviews/ReviewForm";
+import ReservationRate from "./components/reservation-rate/ReservationRate";
 import Car from "./components/single-car/Car";
 import ReserveCar from "./components/reserve-car/ReserveCar";
 import Dashboard from "./components/dashboard/Dashboard";
@@ -29,7 +29,7 @@ function App() {
         <Route path="/car/:id" element={<Car />} />
         <Route path="/car-reserve/:id" element={<ReserveCar />} />
         <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/add-review" element={<ReviewForm />} />
+        <Route path="/reservation/rate/:id" element={<ReservationRate />} />
         <Route path="/reservation/status/:id" element={<ReservationStatus />} />
       </Routes>
     </Router>

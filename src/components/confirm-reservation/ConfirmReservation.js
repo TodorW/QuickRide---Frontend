@@ -6,21 +6,18 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { ReservationService } from "../../api/api";
 import { format } from "date-fns";
+import PopUpError from "../PopUpError";
+import PopUpSucces from "../PopUpSucces";
 
 const ConfirmReservation = ({ open, setOpen }) => {
+  const [isErrorPopUpOpen, setIsErrorPopUpOpen] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [isSuccesPopUpOpen, setIsSuccesPopUpOpen] = useState(false);
+  const [succesMessage, setSuccesMessage] = useState("");
+
   const reservation = useSelector((state) => state.reservation);
 
   const handleSendReservations = async () => {
-    if (
-      !reservation.startDate ||
-      !reservation.endDate ||
-      !reservation.car ||
-      !reservation.user
-    ) {
-      console.log("Missing reservation data.");
-      return;
-    }
-
     const startDate = new Date(reservation.startDate);
     const endDate = new Date(reservation.endDate);
 
@@ -34,17 +31,14 @@ const ConfirmReservation = ({ open, setOpen }) => {
       end_date: formattedEndDate,
     };
 
-    console.log("Sending reservation data:", reservationData);
-
     try {
-      const response = await ReservationService.StoreReservation(
-        reservationData
-      );
-      console.log("API Response", response);
+      await ReservationService.StoreReservation(reservationData);
+      setSuccesMessage("Reservation is pending!");
+      setIsSuccesPopUpOpen(true);
       setOpen(false);
     } catch (error) {
-      console.log("Error sending reservation:", error);
-      setOpen(false);
+      setErrorMessage(error.response.data.message);
+      setIsErrorPopUpOpen(true);
     }
   };
   return (
@@ -83,66 +77,66 @@ const ConfirmReservation = ({ open, setOpen }) => {
                   />
                 </div>
                 <div className="sm:col-span-8 lg:col-span-7">
-                <h2 className="text-2xl font-bold text-gray-400 dark:text-gray-400 sm:pr-12">
-  <p>
-    Car: {reservation.car.make} {reservation.car.model}
-  </p>
-</h2>
+                  <h2 className="text-2xl font-bold text-gray-400 dark:text-gray-400 sm:pr-12">
+                    <p>
+                      Car: {reservation.car.make} {reservation.car.model}
+                    </p>
+                  </h2>
 
-<section
-  aria-labelledby="information-heading"
-  className="mt-2"
->
-  <h3 id="information-heading" className="sr-only">
-    Car information
-  </h3>
+                  <section
+                    aria-labelledby="information-heading"
+                    className="mt-2"
+                  >
+                    <h3 id="information-heading" className="sr-only">
+                      Car information
+                    </h3>
 
-  <p className="text-2xl text-gray-400 dark:text-gray-400">
-    Total price: ${reservation.totalPrice}
-  </p>
-</section>
+                    <p className="text-2xl text-gray-400 dark:text-gray-400">
+                      Total price: ${reservation.totalPrice}
+                    </p>
+                  </section>
 
-<section aria-labelledby="options-heading" className="mt-10">
-  <h3 id="options-heading" className="sr-only">
-    Product options
-  </h3>
-  <div className="mb-4">
-  <label
-    htmlFor="start_date"
-    className="block mb-2 text-sm font-medium text-gray-400"
-  >
-    Start date:
-  </label>
-  <DatePicker
-    id="start_date"
-    selected={reservation.startDate}
-    className="block w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-md text-gray-400" // Dodata klasa za svetlo sivu boju
-    placeholderText="Start date"
-    showTimeSelect
-    dateFormat="yyyy-MM-dd HH:mm:ss"
-    readOnly
-    disabled
-  />
-</div>
+                  <section aria-labelledby="options-heading" className="mt-10">
+                    <h3 id="options-heading" className="sr-only">
+                      Product options
+                    </h3>
+                    <div className="mb-4">
+                      <label
+                        htmlFor="start_date"
+                        className="block mb-2 text-sm font-medium text-gray-400"
+                      >
+                        Start date:
+                      </label>
+                      <DatePicker
+                        id="start_date"
+                        selected={reservation.startDate}
+                        className="block w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-md text-gray-400" // Dodata klasa za svetlo sivu boju
+                        placeholderText="Start date"
+                        showTimeSelect
+                        dateFormat="yyyy-MM-dd HH:mm:ss"
+                        readOnly
+                        disabled
+                      />
+                    </div>
 
-<div className="mb-4">
-  <label
-    htmlFor="end_date"
-    className="block mb-2 text-sm font-medium text-gray-400"
-  >
-    End date:
-  </label>
-  <DatePicker
-    id="end_date"
-    selected={reservation.endDate}
-    className="block w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-md text-gray-400" // Dodata klasa za svetlo sivu boju
-    placeholderText="End date"
-    showTimeSelect
-    dateFormat="yyyy-MM-dd HH:mm:ss"
-    readOnly
-    disabled
-  />
-</div>
+                    <div className="mb-4">
+                      <label
+                        htmlFor="end_date"
+                        className="block mb-2 text-sm font-medium text-gray-400"
+                      >
+                        End date:
+                      </label>
+                      <DatePicker
+                        id="end_date"
+                        selected={reservation.endDate}
+                        className="block w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-md text-gray-400" // Dodata klasa za svetlo sivu boju
+                        placeholderText="End date"
+                        showTimeSelect
+                        dateFormat="yyyy-MM-dd HH:mm:ss"
+                        readOnly
+                        disabled
+                      />
+                    </div>
 
                     <form>
                       <button
@@ -153,6 +147,20 @@ const ConfirmReservation = ({ open, setOpen }) => {
                         Reserve a car
                       </button>
                     </form>
+                    {isErrorPopUpOpen && (
+                      <PopUpError
+                        open={isErrorPopUpOpen}
+                        onClose={() => setIsErrorPopUpOpen(false)}
+                        message={errorMessage}
+                      />
+                    )}
+                    {isSuccesPopUpOpen && (
+                      <PopUpError
+                        open={isSuccesPopUpOpen}
+                        onClose={() => setIsSuccesPopUpOpen(false)}
+                        message={succesMessage}
+                      />
+                    )}
                   </section>
                 </div>
               </div>

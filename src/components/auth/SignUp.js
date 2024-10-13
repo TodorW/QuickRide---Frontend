@@ -73,12 +73,7 @@ const SignUp = () => {
       </div>
 
       <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-        <form
-          action="#"
-          method="POST"
-          className="space-y-6"
-          onSubmit={createAccount}
-        >
+        <form className="space-y-6" onSubmit={createAccount}>
           <div>
             <label
               htmlFor="name"
@@ -181,7 +176,7 @@ const SignUp = () => {
           <div>
             <button
               type="submit"
-              className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+              className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 transition duration-200"
             >
               Sign up
             </button>

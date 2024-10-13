@@ -230,13 +230,13 @@ const Cars = () => {
                 <p className="mt-2 text-sm text-gray-400">{car.description}</p>
                 <button
                   onClick={() => navigate(`/car/${car.id}`)}
-                  className="w-full px-4 py-2 mt-4 text-sm font-medium text-white bg-indigo-600 rounded-md hover:bg-indigo-700"
+                  className="w-full px-4 py-2 mt-4 text-sm font-medium text-white bg-indigo-600 rounded-md hover:bg-indigo-700 transition duration-200"
                 >
                   View Details
                 </button>
                 <button
                   onClick={() => navigate(`/car-reserve/${car.id}`)}
-                  className="w-full px-4 py-2 mt-4 text-sm font-medium text-white bg-indigo-600 rounded-md hover:bg-indigo-700"
+                  className="w-full px-4 py-2 mt-4 text-sm font-medium text-white bg-indigo-600 rounded-md hover:bg-indigo-700 transition duration-200"
                 >
                   Reserve a car
                 </button>

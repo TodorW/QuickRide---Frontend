@@ -109,7 +109,7 @@ const ReservationsDashboard = () => {
                       onClick={() =>
                         navigate(`/reservation/edit/${reservation.id}`)
                       }
-                      className="px-4 py-2 text-sm font-semibold text-white bg-blue-600 rounded-md hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600"
+                      className="px-4 py-2 text-sm font-semibold text-white bg-blue-600 rounded-md hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 transition duration-200"
                     >
                       Edit
                     </button>
@@ -117,7 +117,7 @@ const ReservationsDashboard = () => {
                       onClick={() =>
                         navigate(`/reservation/cancel/${reservation.id}`)
                       }
-                      className="px-4 py-2 text-sm font-semibold text-white bg-red-600 rounded-md hover:bg-red-700 dark:bg-red-500 dark:hover:bg-red-600"
+                      className="px-4 py-2 text-sm font-semibold text-white bg-red-600 rounded-md hover:bg-red-700 dark:bg-red-500 dark:hover:bg-red-600 transition duration-200"
                     >
                       Cancel
                     </button>
@@ -125,7 +125,7 @@ const ReservationsDashboard = () => {
                       onClick={() =>
                         navigate(`/reservation/status/${reservation.id}`)
                       }
-                      className="px-4 py-2 text-sm font-semibold text-white bg-gray-600 rounded-md hover:bg-gray-700 dark:bg-gray-500 dark:hover:bg-gray-600"
+                      className="px-4 py-2 text-sm font-semibold text-white bg-gray-600 rounded-md hover:bg-gray-700 dark:bg-gray-500 dark:hover:bg-gray-600 transition duration-200"
                     >
                       Check Status
                     </button>
@@ -136,7 +136,7 @@ const ReservationsDashboard = () => {
                       disabled={reservation.status !== "returned"}
                       className={`px-4 py-2 text-sm font-semibold text-white ${
                         reservation.status === "returned"
-                          ? "bg-yellow-600 hover:bg-yellow-700 dark:bg-yellow-500 dark:hover:bg-yellow-600"
+                          ? "bg-yellow-600 hover:bg-yellow-700 dark:bg-yellow-500 dark:hover:bg-yellow-600 transition duration-200"
                           : "bg-yellow-300 cursor-not-allowed"
                       } rounded-md`}
                     >

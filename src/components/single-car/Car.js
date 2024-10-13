@@ -133,7 +133,7 @@ const Car = () => {
             {/* Reserve button */}
             <button
               onClick={() => navigate(`/car-reserve/${car.id}`)}
-              className="w-full px-4 py-2 mt-8 text-lg font-semibold text-white bg-indigo-600 rounded-md hover:bg-indigo-700"
+              className="w-full px-4 py-2 mt-8 text-lg font-semibold text-white bg-indigo-600 rounded-md hover:bg-indigo-700 transition duration-200"
             >
               Reserve
             </button>
