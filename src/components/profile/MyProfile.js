@@ -65,7 +65,7 @@ const MyProfile = () => {
       <div className="sm:mx-auto sm:w-full sm:max-w-lg bg-gray-800 p-6 rounded-md shadow-md">
         <button
           onClick={handleGoBack}
-          className="absolute top-4 left-4 flex items-center text-white"
+          className="absolute top-4 left-4 flex items-center text-gray-900 dark:text-white bg-indigo-600 px-4 py-2 rounded-md shadow-md hover:bg-indigo-700 transition-colors duration-300"
         >
           <ArrowLeftIcon className="h-6 w-6" />
           <span className="ml-2">Go Back</span>
