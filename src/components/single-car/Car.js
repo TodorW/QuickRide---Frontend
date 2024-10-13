@@ -1,16 +1,15 @@
 import { useState, useEffect } from "react";
-//import { StarIcon } from "@heroicons/react/20/solid";
 import { ArrowLeftIcon } from "@heroicons/react/24/solid";
 import Header from "../layout/Header";
-import { CarService } from "../../api/api";
+import { CarService, RatingService } from "../../api/api";
 import { useNavigate, useParams } from "react-router-dom";
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
 import CarAvailabilityCalendar from "./CarAvailabilityCalendar";
 
 const Car = () => {
-  const [car, setCar] = useState([]);
-  const [reservedDates, setReservedDates] = useState([]);
+  const [car, setCar] = useState({});
+  const [reservationIds, setReservationIds] = useState([]);
+  const [ratings, setRatings] = useState([]);
+  const [averageRating, setAverageRating] = useState(0);
   const { id } = useParams();
   const navigate = useNavigate();
 
@@ -23,28 +22,42 @@ const Car = () => {
       try {
         const response = await CarService.GetCar(id);
         setCar(response.data.car);
+        setReservationIds(response.data.reservation_ids);
       } catch (error) {
-        console.log("Error fetching cars:", error);
-      }
-    };
-
-    const fetchReservedDates = async () => {
-      try {
-        const response = await CarService.GetReservedDates(id);
-        setReservedDates(response.data.reserved_dates);
-      } catch (error) {
-        console.log("Error fetching reserved dates:", error);
+        console.log("Error fetching car:", error);
       }
     };
 
     fetchCar();
-    fetchReservedDates();
   }, [id]);
+
+  useEffect(() => {
+    if (reservationIds.length > 0) {
+      const fetchRatingsAndReviews = async () => {
+        try {
+          const response = await RatingService.GetRatings(reservationIds);
+          const ratingsData = response.data.ratings;
+
+          setRatings(ratingsData);
+
+          const average =
+            ratingsData.reduce((sum, rating) => sum + rating.rating, 0) /
+            ratingsData.length;
+
+          setAverageRating(average);
+        } catch (error) {
+          console.log("Error fetching ratings:", error);
+        }
+      };
+
+      fetchRatingsAndReviews();
+    }
+  }, [reservationIds]);
 
   return (
     <div className="bg-gray-900 min-h-screen text-gray-100">
       <Header />
-      <div className="mb-6">
+      <div className="pt-4 pl-4 mb-6">
         <button
           onClick={handleGoBack}
           className="flex items-center text-gray-900 dark:text-white bg-indigo-600 px-4 py-2 rounded-md shadow-md hover:bg-indigo-700 transition-colors duration-300"
@@ -138,6 +151,56 @@ const Car = () => {
             >
               Reserve
             </button>
+
+            {/* Ratings and Reviews */}
+            <div className="mt-10 px-4 sm:px-6 lg:px-8 mx-auto max-w-4xl">
+              {ratings.length > 0 ? (
+                <h3 className="text-2xl font-semibold text-center text-gray-100">
+                  Average Rating:{" "}
+                  {[1, 2, 3, 4, 5].map((star) => (
+                    <span
+                      key={star}
+                      className={`${
+                        star <= averageRating
+                          ? "text-indigo-500"
+                          : "text-indigo-300"
+                      }`}
+                    >
+                      ★
+                    </span>
+                  ))}
+                  ({averageRating.toFixed(1)})
+                </h3>
+              ) : (
+                <p className="text-2xl font-semibold text-center text-gray-100">
+                  No ratings yet.
+                </p>
+              )}
+
+              <div className="space-y-6 review-list mt-8 mx-auto max-w-4xl">
+                {ratings.length > 0 ? (
+                  ratings.map((rating, index) => (
+                    <div
+                      key={index}
+                      className="p-6 transition-all duration-300 bg-gray-800 rounded-lg shadow dark:bg-gray-700 hover:shadow-lg"
+                    >
+                      <p className="mb-4 text-lg text-gray-300 dark:text-gray-200">
+                        "{rating.comment}"
+                      </p>
+                      <p className="text-sm text-gray-500 dark:text-gray-400">
+                        By: {rating.user_name} from {rating.start_date} to{" "}
+                        {rating.end_date}
+                      </p>
+                      <p className="text-sm text-indigo-500 mt-2">
+                        {rating.rating} ★
+                      </p>
+                    </div>
+                  ))
+                ) : (
+                  <p className="text-gray-100 text-center">No reviews yet.</p>
+                )}
+              </div>
+            </div>
           </div>
         </div>
       </div>
