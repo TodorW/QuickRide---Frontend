@@ -24,7 +24,7 @@ const SignUp = () => {
 
   useEffect(() => {
     checkIfUserIsLoggedIn();
-  }, []);
+  }, );
 
   const createAccount = async (e) => {
     e.preventDefault();
