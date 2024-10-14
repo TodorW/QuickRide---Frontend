@@ -16,6 +16,7 @@ import ReserveCar from "./components/reserve-car/ReserveCar";
 import Dashboard from "./components/dashboard/Dashboard";
 import ReservationStatus from "./components/status/ReservationStatus";
 import EditReservation from "./components/edit-reservation/EditReservation";
+import CancelReservation from "./components/reservation-cancel/ReservationCancel";
 
 function App() {
   return (
@@ -33,6 +34,7 @@ function App() {
         <Route path="/reservation/rate/:id" element={<ReservationRate />} />
         <Route path="/reservation/status/:id" element={<ReservationStatus />} />
         <Route path="/reservation/edit/:id" element={<EditReservation />} />
+        <Route path="/reservation/cancel/:id" element={<CancelReservation />} />
       </Routes>
     </Router>
   );

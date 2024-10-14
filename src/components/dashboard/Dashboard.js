@@ -13,9 +13,6 @@ const ReservationsDashboard = () => {
   const [user, setUser] = useState([]);
   const [cars, setCars] = useState({});
   const [ratedStatus, setRatedStatus] = useState({});
-  const [showWarningPopup, setShowWarningPopup] = useState(false);
-  const [reservationToCancel, setReservationToCancel] = useState(null);
-
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -86,28 +83,10 @@ const ReservationsDashboard = () => {
     }
   }, [reservations]);
 
-  const handleCancelReservation = (reservationId) => {
-    // Set reservation ID to cancel and show warning popup
-    setReservationToCancel(reservationId);
-    setShowWarningPopup(true);
-  };
-
-  const cancelReservation = async (reservationId) => {
-    try {
-      await ReservationService.CancelReservation(reservationId);
-      setReservations((prev) =>
-        prev.filter((reservation) => reservation.id !== reservationId)
-      );
-      setShowWarningPopup(false);
-    } catch (error) {
-      console.log("Error canceling reservation:", error);
-    }
-  };
-
   return (
     <>
       <Header />
-      <div className="min-h-screen py-12 transition-colors duration-300 bg-gray-100 dark:bg-gray-900">
+      <div className=" bg-gray-900  min-h-screen py-12 transition-colors duration-300 bg-gray-100 ">
         <div className="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
           <h1 className="mb-8 text-3xl font-extrabold text-gray-900 dark:text-white animate-fade-in">
             Reservations Dashboard
@@ -154,11 +133,21 @@ const ReservationsDashboard = () => {
                     Status: {reservation.status}
                   </p>
                   <div className="grid grid-cols-2 gap-2 mt-4">
-                    {/* <button
-                      onClick={() => handleCancelReservation(reservation.id)}
+                    <button
+                      onClick={() =>
+                        navigate(`/reservation/cancel/${reservation.id}`)
+                      }
                       className="px-4 py-2 text-sm font-semibold text-white bg-red-600 rounded-md hover:bg-red-700 dark:bg-red-500 dark:hover:bg-red-600 transition duration-200"
                     >
                       Cancel
+                    </button>
+                    {/* <button
+                      onClick={() =>
+                        navigate(`/reservation/edit/${reservation.id}`)
+                      }
+                      className="px-4 py-2 text-sm font-semibold text-white bg-orange-600 rounded-md hover:bg-orange-700 dark:bg-orange-500 dark:hover:bg-orange-600 transition duration-200"
+                    >
+                      Edit
                     </button> */}
                     <button
                       onClick={() =>
@@ -200,31 +189,6 @@ const ReservationsDashboard = () => {
           )}
         </div>
       </div>
-
-      {showWarningPopup && (
-        <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
-          <div className="bg-white p-6 rounded shadow-lg">
-            <h2 className="text-lg font-bold">Warning</h2>
-            <p className="mt-2">
-              Are you sure you want to cancel this reservation?
-            </p>
-            <div className="mt-4 flex justify-end">
-              <button
-                onClick={() => cancelReservation(reservationToCancel)} // Call cancel function
-                className="px-4 py-2 mr-2 text-white bg-red-600 rounded hover:bg-red-700"
-              >
-                Yes, Cancel
-              </button>
-              <button
-                onClick={() => setShowWarningPopup(false)}
-                className="px-4 py-2 text-gray-700 bg-gray-300 rounded hover:bg-gray-400"
-              >
-                No, Go Back
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
     </>
   );
 };

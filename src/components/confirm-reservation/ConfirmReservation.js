@@ -7,7 +7,6 @@ import "react-datepicker/dist/react-datepicker.css";
 import { ReservationService } from "../../api/api";
 import { format } from "date-fns";
 import PopUpError from "../PopUpError";
-import PopUpSucces from "../PopUpSucces";
 import { useNavigate } from "react-router-dom";
 
 const ConfirmReservation = ({ open, setOpen }) => {
@@ -62,7 +61,7 @@ const ConfirmReservation = ({ open, setOpen }) => {
             transition
             className="flex w-full transform text-left text-base transition data-[closed]:translate-y-4 data-[closed]:opacity-0 data-[enter]:duration-300 data-[leave]:duration-200 data-[enter]:ease-out data-[leave]:ease-in md:my-8 md:max-w-2xl md:px-4 data-[closed]:md:translate-y-0 data-[closed]:md:scale-95 lg:max-w-4xl"
           >
-            <div className="relative flex w-full items-center overflow-hidden bg-white dark:bg-gray-900 px-4 pb-8 pt-14 shadow-2xl sm:px-6 sm:pt-8 md:p-6 lg:p-8">
+            <div className="bg-gray-900  relative flex w-full items-center overflow-hidden px-4 pb-8 pt-14 shadow-2xl sm:px-6 sm:pt-8 md:p-6 lg:p-8">
               <button
                 type="button"
                 onClick={() => setOpen(false)}
@@ -75,7 +74,7 @@ const ConfirmReservation = ({ open, setOpen }) => {
               <div className="grid w-full grid-cols-1 items-start gap-x-6 gap-y-8 sm:grid-cols-12 lg:gap-x-8">
                 <div className="aspect-h-3 aspect-w-2 overflow-hidden rounded-lg bg-gray-100 dark:bg-gray-900 sm:col-span-4 lg:col-span-5">
                   <img
-                    alt={`Car image`}
+                    alt={`Car`}
                     src={`http://tim1.cortexakademija.com/storage/cars-images/${reservation.car.image}`}
                     className="object-cover object-center"
                   />
