@@ -52,13 +52,8 @@ const Header = () => {
         className="mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8"
       >
         <div className="flex lg:flex-1">
-          <a href="/home" className="-m-1.5 p-1.5">
-            <span className="sr-only">QuickRide</span>
-            <img
-              alt=""
-              src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
-              className="h-8 w-auto border border-indigo-600 p-1 rounded"
-            />
+          <a href="/home" className="-m-1.5 p-1.5 flex items-center">
+            <span className="text-indigo-600 font-bold text-lg">QuickRide</span>
           </a>
         </div>
         <div className="flex lg:hidden">
