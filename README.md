@@ -32,6 +32,7 @@ npm install
 Install additional libraries (if not included in package.json): If you need to install specific libraries, you can use the following commands:
 
  ```bash
+npm install
 npm install axios
 npm install tailwindcss
 npm install @headlessui/react
