@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { useNavigate, Link } from "react-router-dom"; // Import useNavigate for redirection
+import { useNavigate, Link } from "react-router-dom";
 import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/solid";
 import PopUpLogin from "../PopUpError";
 import { AuthService } from "../../api/api";
@@ -54,15 +54,11 @@ const Login = () => {
 
   return (
     <div className="min-h-screen flex flex-col justify-center items-center bg-gray-900 text-white">
-      <div className="sm:mx-auto sm:w-full sm:max-w-sm bg-gray-800 p-6 rounded-md shadow-md">
-        <img
-          alt="Your Company"
-          src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
-          className="mx-auto h-10 w-auto"
-        />
-        <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight">
-          Sign in to your account
-        </h2>
+      <div className="sm:mx-auto sm:w-full sm:max-w-sm">
+        <div className="bg-gray-800 border border-gray-700 rounded-lg p-4 text-center">
+          {/* QuickRide Logo */}
+          <h1 className="text-2xl font-bold text-indigo-500">QuickRide</h1>
+        </div>
       </div>
 
       <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
@@ -119,7 +115,7 @@ const Login = () => {
             </div>
           </div>
 
-          {/* Submit dugme */}
+          {/* Submit button */}
           <div>
             <button
               type="submit"
