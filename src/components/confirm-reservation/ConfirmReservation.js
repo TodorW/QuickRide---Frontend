@@ -8,12 +8,15 @@ import { ReservationService } from "../../api/api";
 import { format } from "date-fns";
 import PopUpError from "../PopUpError";
 import PopUpSucces from "../PopUpSucces";
+import { useNavigate } from "react-router-dom";
 
-const ConfirmReservation = ({ open, setOpen, onSuccess }) => {
+const ConfirmReservation = ({ open, setOpen }) => {
   const [isErrorPopUpOpen, setIsErrorPopUpOpen] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [isSuccesPopUpOpen, setIsSuccesPopUpOpen] = useState(false);
   const [succesMessage, setSuccesMessage] = useState("");
+
+  const navigate = useNavigate();
 
   const reservation = useSelector((state) => state.reservation);
 
@@ -33,9 +36,10 @@ const ConfirmReservation = ({ open, setOpen, onSuccess }) => {
 
     try {
       await ReservationService.StoreReservation(reservationData);
-      onSuccess("Reservation is pending!");
+      setSuccesMessage("Reservation is pending!");
       setIsSuccesPopUpOpen(true);
       setOpen(false);
+      navigate("/dashboard");
     } catch (error) {
       setErrorMessage(error.response.data.message);
       setIsErrorPopUpOpen(true);
@@ -155,7 +159,7 @@ const ConfirmReservation = ({ open, setOpen, onSuccess }) => {
                       />
                     )}
                     {isSuccesPopUpOpen && (
-                      <PopUpSucces
+                      <PopUpError
                         open={isSuccesPopUpOpen}
                         onClose={() => setIsSuccesPopUpOpen(false)}
                         message={succesMessage}

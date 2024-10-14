@@ -15,6 +15,7 @@ import Car from "./components/single-car/Car";
 import ReserveCar from "./components/reserve-car/ReserveCar";
 import Dashboard from "./components/dashboard/Dashboard";
 import ReservationStatus from "./components/status/ReservationStatus";
+import EditReservation from "./components/edit-reservation/EditReservation";
 
 function App() {
   return (
@@ -31,6 +32,7 @@ function App() {
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/reservation/rate/:id" element={<ReservationRate />} />
         <Route path="/reservation/status/:id" element={<ReservationStatus />} />
+        <Route path="/reservation/edit/:id" element={<EditReservation />} />
       </Routes>
     </Router>
   );
