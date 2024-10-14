@@ -154,12 +154,12 @@ const ReservationsDashboard = () => {
                     Status: {reservation.status}
                   </p>
                   <div className="grid grid-cols-2 gap-2 mt-4">
-                    <button
+                    {/* <button
                       onClick={() => handleCancelReservation(reservation.id)}
                       className="px-4 py-2 text-sm font-semibold text-white bg-red-600 rounded-md hover:bg-red-700 dark:bg-red-500 dark:hover:bg-red-600 transition duration-200"
                     >
                       Cancel
-                    </button>
+                    </button> */}
                     <button
                       onClick={() =>
                         navigate(`/reservation/status/${reservation.id}`)
