@@ -145,7 +145,6 @@ const Cars = () => {
             <option value="gasoline">Gasoline</option>
             <option value="diesel">Diesel</option>
             <option value="electricity">Electric</option>
-            <option value="Hybrid">Hybrid</option>
           </select>
 
           {/* Transmission Filter */}
@@ -227,7 +226,6 @@ const Cars = () => {
                 <p className="mt-1 text-sm font-medium text-gray-300">
                   Price per day: ${car.price_per_day}
                 </p>
-                <p className="mt-2 text-sm text-gray-400">{car.description}</p>
                 <button
                   onClick={() => navigate(`/car/${car.id}`)}
                   className="w-full px-4 py-2 mt-4 text-sm font-medium text-white bg-indigo-600 rounded-md hover:bg-indigo-700 transition duration-200"
