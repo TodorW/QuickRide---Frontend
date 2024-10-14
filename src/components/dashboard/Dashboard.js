@@ -87,19 +87,9 @@ const ReservationsDashboard = () => {
   }, [reservations]);
 
   const handleCancelReservation = (reservationId) => {
-    const reservation = reservations.find((r) => r.id === reservationId);
-    const startDate = new Date(reservation.start_date);
-    const currentDate = new Date();
-    const timeDifference = startDate - currentDate; // u milisekundama
-    const hoursDifference = timeDifference / (1000 * 60 * 60); // u satima
-
-    if (hoursDifference < 48) {
-      setReservationToCancel(reservationId);
-      setShowWarningPopup(true);
-    } else {
-      // Ako je više od 48 sati, odmah otkaži rezervaciju
-      cancelReservation(reservationId);
-    }
+    // Set reservation ID to cancel and show warning popup
+    setReservationToCancel(reservationId);
+    setShowWarningPopup(true);
   };
 
   const cancelReservation = async (reservationId) => {
@@ -216,13 +206,11 @@ const ReservationsDashboard = () => {
           <div className="bg-white p-6 rounded shadow-lg">
             <h2 className="text-lg font-bold">Warning</h2>
             <p className="mt-2">
-              You are trying to cancel a reservation less than 48 hours before
-              the start date. You may be subject to a cancellation fee. Do you
-              want to proceed?
+              Are you sure you want to cancel this reservation?
             </p>
             <div className="mt-4 flex justify-end">
               <button
-                onClick={() => cancelReservation(reservationToCancel)}
+                onClick={() => cancelReservation(reservationToCancel)} // Call cancel function
                 className="px-4 py-2 mr-2 text-white bg-red-600 rounded hover:bg-red-700"
               >
                 Yes, Cancel
