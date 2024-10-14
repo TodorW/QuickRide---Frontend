@@ -35,7 +35,6 @@ const MyProfile = () => {
     try {
       const success = await AuthService.logout();
       if (success) {
-        console.log("Logout successful");
         navigate("/login"); // Redirect to login on successful logout
       }
     } catch (error) {

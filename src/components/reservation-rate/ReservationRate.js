@@ -20,8 +20,9 @@ const ReservationRate = () => {
       try {
         const response = await ReservationService.ShowReservation(id);
         setReservation(response.data.reservation);
-        console.log(response.data.reservation);
-      } catch (error) {}
+      } catch (error) {
+        console.log(error);
+      }
     };
 
     fetchReservation();

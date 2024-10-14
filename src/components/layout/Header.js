@@ -38,7 +38,6 @@ const Header = () => {
     try {
       const success = await AuthService.logout();
       if (success) {
-        console.log("Logout successful");
         navigate("/login");
       }
     } catch (error) {

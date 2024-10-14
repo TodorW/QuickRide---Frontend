@@ -11,7 +11,6 @@ const CarAvailabilityCalendar = ({ carId }) => {
       try {
         const response = await ReservationService.ListCarsReservedDates(carId);
         setReservedDates(response.data.reserved_dates);
-        console.log(reservedDates);
       } catch (error) {
         console.log("Error fetching reserved dates:", error);
       }
