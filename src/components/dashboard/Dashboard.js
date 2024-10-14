@@ -13,6 +13,8 @@ const ReservationsDashboard = () => {
   const [user, setUser] = useState([]);
   const [cars, setCars] = useState({});
   const [ratedStatus, setRatedStatus] = useState({});
+  const [showWarningPopup, setShowWarningPopup] = useState(false);
+  const [reservationToCancel, setReservationToCancel] = useState(null);
 
   const navigate = useNavigate();
 
@@ -84,6 +86,34 @@ const ReservationsDashboard = () => {
     }
   }, [reservations]);
 
+  const handleCancelReservation = (reservationId) => {
+    const reservation = reservations.find((r) => r.id === reservationId);
+    const startDate = new Date(reservation.start_date);
+    const currentDate = new Date();
+    const timeDifference = startDate - currentDate; // u milisekundama
+    const hoursDifference = timeDifference / (1000 * 60 * 60); // u satima
+
+    if (hoursDifference < 48) {
+      setReservationToCancel(reservationId);
+      setShowWarningPopup(true);
+    } else {
+      // Ako je više od 48 sati, odmah otkaži rezervaciju
+      cancelReservation(reservationId);
+    }
+  };
+
+  const cancelReservation = async (reservationId) => {
+    try {
+      await ReservationService.CancelReservation(reservationId);
+      setReservations((prev) =>
+        prev.filter((reservation) => reservation.id !== reservationId)
+      );
+      setShowWarningPopup(false);
+    } catch (error) {
+      console.log("Error canceling reservation:", error);
+    }
+  };
+
   return (
     <>
       <Header />
@@ -97,7 +127,7 @@ const ReservationsDashboard = () => {
             {reservations.map((reservation, index) => (
               <div
                 key={reservation.id}
-                className="overflow-hidden transition duration-300 transform bg-white rounded-lg shadow-md group dark:bg-gray-800 hover:scale-105 hover:shadow-xl animate-fade-in-up"
+                className="overflow-hidden transition duration-300 transform bg-white rounded-lg shadow-md group dark:bg-gray-800 hover:scale-105 hover:shadow-xl animate-fade-in"
                 style={{ animationDelay: `${index * 100}ms` }}
               >
                 <div className="relative aspect-w-2 aspect-h-3">
@@ -135,17 +165,7 @@ const ReservationsDashboard = () => {
                   </p>
                   <div className="grid grid-cols-2 gap-2 mt-4">
                     <button
-                      onClick={() =>
-                        navigate(`/reservation/edit/${reservation.id}`)
-                      }
-                      className="px-4 py-2 text-sm font-semibold text-white bg-blue-600 rounded-md hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 transition duration-200"
-                    >
-                      Edit
-                    </button>
-                    <button
-                      onClick={() =>
-                        navigate(`/reservation/cancel/${reservation.id}`)
-                      }
+                      onClick={() => handleCancelReservation(reservation.id)}
                       className="px-4 py-2 text-sm font-semibold text-white bg-red-600 rounded-md hover:bg-red-700 dark:bg-red-500 dark:hover:bg-red-600 transition duration-200"
                     >
                       Cancel
@@ -190,6 +210,33 @@ const ReservationsDashboard = () => {
           )}
         </div>
       </div>
+
+      {showWarningPopup && (
+        <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
+          <div className="bg-white p-6 rounded shadow-lg">
+            <h2 className="text-lg font-bold">Warning</h2>
+            <p className="mt-2">
+              You are trying to cancel a reservation less than 48 hours before
+              the start date. You may be subject to a cancellation fee. Do you
+              want to proceed?
+            </p>
+            <div className="mt-4 flex justify-end">
+              <button
+                onClick={() => cancelReservation(reservationToCancel)}
+                className="px-4 py-2 mr-2 text-white bg-red-600 rounded hover:bg-red-700"
+              >
+                Yes, Cancel
+              </button>
+              <button
+                onClick={() => setShowWarningPopup(false)}
+                className="px-4 py-2 text-gray-700 bg-gray-300 rounded hover:bg-gray-400"
+              >
+                No, Go Back
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 };

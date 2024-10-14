@@ -110,6 +110,12 @@ export const ReservationService = {
   ShowReservation(reservationId) {
     return client.get(`reservations/${reservationId}`);
   },
+  UpdateReservation(reservationId, reservationData) {
+    return client.put(`reservations/${reservationId}`, reservationData);
+  },
+  CancelReservation(reservationId) {
+    return client.delete(`reservations/${reservationId}/cancel`);
+  },
 };
 
 export const RatingService = {
