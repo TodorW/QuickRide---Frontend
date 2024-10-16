@@ -32,7 +32,7 @@ const ReservationCancel = () => {
           Cancel Reservation
         </h2>
         <p className="mb-4 text-center">
-          Are you sure you want to cancel reservation ID: {id}?
+          Are you sure you want to cancel reservation?
         </p>
         <div className="flex justify-between">
           <button
