@@ -5,7 +5,7 @@ const HTTP_UNAUTHORIZED = 401;
 const HTTP_OK = 200;
 
 const client = axios.create({
-  baseURL: "http://tim1.cortexakademija.com/api/",
+  baseURL: "https://tim1.cortexakademija.com/api/",
   headers: {
     Accept: "application/json",
     "Content-Type": "application/json",

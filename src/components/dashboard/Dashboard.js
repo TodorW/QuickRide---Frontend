@@ -86,7 +86,7 @@ const ReservationsDashboard = () => {
   return (
     <>
       <Header />
-      <div className=" bg-gray-900  min-h-screen py-12 transition-colors duration-300 bg-gray-100 ">
+      <div className="bg-gray-900 min-h-screen py-12 transition-colors duration-300 bg-gray-100">
         <div className="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
           <h1 className="mb-8 text-3xl font-extrabold text-gray-900 dark:text-white animate-fade-in">
             Reservations Dashboard
@@ -133,22 +133,16 @@ const ReservationsDashboard = () => {
                     Status: {reservation.status}
                   </p>
                   <div className="grid grid-cols-2 gap-2 mt-4">
-                    <button
-                      onClick={() =>
-                        navigate(`/reservation/cancel/${reservation.id}`)
-                      }
-                      className="px-4 py-2 text-sm font-semibold text-white bg-red-600 rounded-md hover:bg-red-700 dark:bg-red-500 dark:hover:bg-red-600 transition duration-200"
-                    >
-                      Cancel
-                    </button>
-                    {/* <button
-                      onClick={() =>
-                        navigate(`/reservation/edit/${reservation.id}`)
-                      }
-                      className="px-4 py-2 text-sm font-semibold text-white bg-orange-600 rounded-md hover:bg-orange-700 dark:bg-orange-500 dark:hover:bg-orange-600 transition duration-200"
-                    >
-                      Edit
-                    </button> */}
+                    {reservation.status !== "returned" && (
+                      <button
+                        onClick={() =>
+                          navigate(`/reservation/cancel/${reservation.id}`)
+                        }
+                        className="px-4 py-2 text-sm font-semibold text-white bg-red-600 rounded-md hover:bg-red-700 dark:bg-red-500 dark:hover:bg-red-600 transition duration-200"
+                      >
+                        Cancel
+                      </button>
+                    )}
                     <button
                       onClick={() =>
                         navigate(`/reservation/status/${reservation.id}`)
@@ -157,23 +151,17 @@ const ReservationsDashboard = () => {
                     >
                       Check Status
                     </button>
-                    <button
-                      onClick={() =>
-                        navigate(`/reservation/rate/${reservation.id}`)
-                      }
-                      disabled={
-                        reservation.status !== "returned" ||
-                        ratedStatus[reservation.id]
-                      }
-                      className={`px-4 py-2 text-sm font-semibold text-white ${
-                        reservation.status === "returned" &&
-                        !ratedStatus[reservation.id]
-                          ? "bg-yellow-600 hover:bg-yellow-700 dark:bg-yellow-500 dark:hover:bg-yellow-600 transition duration-200"
-                          : "bg-yellow-300 cursor-not-allowed"
-                      } rounded-md`}
-                    >
-                      {ratedStatus[reservation.id] ? "Already Rated" : "Rate"}
-                    </button>
+                    {reservation.status === "returned" &&
+                      !ratedStatus[reservation.id] && (
+                        <button
+                          onClick={() =>
+                            navigate(`/reservation/rate/${reservation.id}`)
+                          }
+                          className="px-4 py-2 text-sm font-semibold text-white bg-yellow-600 rounded-md hover:bg-yellow-700 dark:bg-yellow-500 dark:hover:bg-yellow-600 transition duration-200"
+                        >
+                          Rate
+                        </button>
+                      )}
                   </div>
                 </div>
               </div>
