@@ -3,9 +3,6 @@ import { useState, useEffect } from "react";
 import {
   Dialog,
   DialogPanel,
-  Disclosure,
-  DisclosureButton,
-  DisclosurePanel,
   Popover,
   PopoverButton,
   PopoverGroup,
@@ -127,13 +124,10 @@ const Header = () => {
         <div className="fixed inset-0 z-10" />
         <DialogPanel className="fixed inset-y-0 right-0 z-10 w-full overflow-y-auto bg-gray-900 px-6 py-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10">
           <div className="flex items-center justify-between">
-            <a href="#" className="-m-1.5 p-1.5">
-              <span className="sr-only">Quick Ride</span>
-              <img
-                alt=""
-                src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
-                className="h-8 w-auto border border-indigo-600 p-1 rounded"
-              />
+            <a href="/home" className="-m-1.5 p-1.5 flex items-center">
+              <span className="text-indigo-600 font-bold text-lg">
+                QuickRide
+              </span>
             </a>
             <button
               type="button"
