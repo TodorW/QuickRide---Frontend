@@ -48,7 +48,13 @@ const ReservationCancel = () => {
             Back
           </button>
         </div>
+        <p className="mt-2 text-sm text-gray-400">
+          Note: If you cancel your reservation less than 48 hours before the
+          start date, you will be charged 50% of the total price. If you cancel
+          more than 48 hours in advance, no charges will apply.
+        </p>
       </div>
+
       {showSuccessPopup && (
         <PopupSuccess
           open={showSuccessPopup}
